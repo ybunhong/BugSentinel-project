@@ -1,0 +1,175 @@
+/* Responsive Design Styles */
+
+/* Mobile First Approach */
+@media (max-width: 767px) {
+  /* Hide scrollbars on mobile for cleaner look */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+  
+  /* Mobile typography adjustments */
+  .mobile-text-sm {
+    font-size: 12px !important;
+  }
+  
+  .mobile-text-md {
+    font-size: 14px !important;
+  }
+  
+  .mobile-text-lg {
+    font-size: 16px !important;
+  }
+  
+  /* Mobile spacing */
+  .mobile-p-sm {
+    padding: 8px !important;
+  }
+  
+  .mobile-p-md {
+    padding: 12px !important;
+  }
+  
+  .mobile-p-lg {
+    padding: 16px !important;
+  }
+  
+  /* Mobile button adjustments */
+  .mobile-btn {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    border-radius: 16px !important;
+  }
+  
+  /* Mobile panel heights */
+  .mobile-panel {
+    height: 250px !important;
+    overflow-y: auto;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet specific styles */
+  .tablet-sidebar {
+    width: 280px !important;
+  }
+  
+  .tablet-panel {
+    width: 320px !important;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  /* Desktop specific styles */
+  .desktop-sidebar {
+    width: 320px !important;
+  }
+  
+  .desktop-panel {
+    width: 380px !important;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+  /* Large desktop styles */
+  .large-desktop-panel {
+    width: 420px !important;
+  }
+}
+
+/* Theme-aware scrollbars */
+.dark-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+  background: rgba(15, 15, 35, 0.5);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.5);
+  border-radius: 4px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.7);
+}
+
+.light-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.light-theme ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.light-theme ::-webkit-scrollbar-thumb {
+  background: rgba(118, 75, 162, 0.5);
+  border-radius: 4px;
+}
+
+.light-theme ::-webkit-scrollbar-thumb:hover {
+  background: rgba(118, 75, 162, 0.7);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Responsive text selection */
+::selection {
+  background: rgba(102, 126, 234, 0.3);
+  color: inherit;
+}
+
+/* Mobile touch targets */
+@media (max-width: 767px) {
+  button, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Responsive container queries */
+@container (max-width: 400px) {
+  .container-responsive {
+    padding: 8px;
+  }
+}
+
+@container (min-width: 401px) {
+  .container-responsive {
+    padding: 16px;
+  }
+}
