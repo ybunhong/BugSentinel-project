@@ -1,18 +1,26 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MainDashboard } from './pages/MainDashboard';
 import { AuthPage } from './pages/AuthPage';
+import { HomePage } from './pages/HomePage';
 import { SupabaseService } from './services/supabaseService';
 import { useAuth } from './hooks/useAuth';
-import './App.css'
+import './App.css';
 
 function App() {
-  const { isAuthenticated } = useAuth(); // Initialize auth hook for session management
-  
-  useEffect(() => {
-    // Test Supabase connection on app load
-    testSupabaseConnection();
-  }, []);
+  const { isAuthenticated } = useAuth();
+  const [route, setRoute] = useState('home');
 
+  useEffect(() => {
+    testSupabaseConnection();
+    // Listen for hash changes
+    const onHashChange = () => {
+      const hash = window.location.hash.replace('#/', '');
+      setRoute(hash || 'home');
+    };
+    window.addEventListener('hashchange', onHashChange);
+    onHashChange();
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   const testSupabaseConnection = async () => {
     const result = await SupabaseService.testConnection();
@@ -23,9 +31,18 @@ function App() {
     }
   };
 
+  if (!isAuthenticated && route === 'analysis') {
+    return <AuthPage />;
+  }
 
-  // Show dashboard for authenticated users, auth page for non-authenticated
-  return isAuthenticated ? <MainDashboard /> : <AuthPage />;
+  switch (route) {
+    case 'home':
+      return <HomePage />;
+    case 'analysis':
+      return <MainDashboard />;
+    default:
+      return <HomePage />;
+  }
 }
 
-export default App
+export default App;

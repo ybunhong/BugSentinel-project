@@ -67,7 +67,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {/* Menu Button */}
           <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => {
+              setSidebarOpen(!sidebarOpen);
+              setSidebarExpanded(!sidebarOpen ? true : false); // expand on open, collapse on close
+            }}
             style={{
               padding: '8px',
               background: theme === 'dark'
@@ -100,42 +103,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
             <Icon name="menu" size={20} />
           </button>
 
-          {/* Expand/Collapse Toggle - Desktop Only */}
-          {!isMobile && (
-            <button
-              onClick={() => setSidebarExpanded(!sidebarExpanded)}
-              aria-label={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-              style={{
-                padding: '8px',
-                background: theme === 'dark'
-                  ? 'rgba(102, 126, 234, 0.1)'
-                  : 'rgba(118, 75, 162, 0.1)',
-                border: theme === 'dark'
-                  ? '1px solid rgba(102, 126, 234, 0.2)'
-                  : '1px solid rgba(118, 75, 162, 0.2)',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: theme === 'dark' ? '#667eea' : '#764ba2',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = theme === 'dark'
-                  ? 'rgba(102, 126, 234, 0.2)'
-                  : 'rgba(118, 75, 162, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = theme === 'dark'
-                  ? 'rgba(102, 126, 234, 0.1)'
-                  : 'rgba(118, 75, 162, 0.1)';
-              }}
-            >
-              {sidebarExpanded ? <Icon name="left" size={18} /> : <Icon name="right" size={18} />}
-            </button>
-          )}
         </div>
 
         {/* Title */}

@@ -114,156 +114,26 @@ export const MainDashboard: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
           }}>
-            {/* Editor Header */}
-            {currentSnippet && (
-              <div style={{
-                padding: '16px 24px',
-                background: theme === 'dark' 
-                  ? 'rgba(15, 15, 35, 0.8)'
-                  : 'rgba(255, 255, 255, 0.8)',
-                borderBottom: theme === 'dark'
-                  ? '1px solid rgba(102, 126, 234, 0.2)'
-                  : '1px solid rgba(118, 75, 162, 0.2)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                flexWrap: 'wrap',
-              }}>
-                <div style={{ flex: 1 }}>
-                  <h2 style={{
-                    margin: '0 0 4px 0',
-                    fontSize: '18px',
-                    fontWeight: '600',
-                    color: theme === 'dark' ? '#ffffff' : '#000000',
-                  }}>
-                    {currentSnippet.title}
-                  </h2>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    fontSize: '14px',
-                    color: theme === 'dark' ? '#cccccc' : '#666666',
-                  }}>
-                    <span>{SnippetService.getLanguageLabel(currentSnippet.language)}</span>
-                    {hasUnsavedChanges && (
-                      <span style={{ color: '#ffc107' }}>• Unsaved changes</span>
-                    )}
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <button
-                    onClick={handleEditSnippetInfo}
-                    style={{
-                      padding: '8px 16px',
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      background: 'rgba(102, 126, 234, 0.1)',
-                      color: '#667eea',
-                      border: '1px solid rgba(102, 126, 234, 0.2)',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    ✏️ Edit Info
-                  </button>
-
-                  <button
-                    onClick={handleSaveCode}
-                    disabled={!hasUnsavedChanges || saving}
-                    style={{
-                      padding: '8px 16px',
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      background: hasUnsavedChanges 
-                        ? 'linear-gradient(135deg, #00f5ff, #0099ff)'
-                        : 'rgba(255, 255, 255, 0.1)',
-                      color: '#ffffff',
-                      border: hasUnsavedChanges 
-                        ? 'none'
-                        : '1px solid rgba(255, 255, 255, 0.2)',
-                      borderRadius: '6px',
-                      cursor: (!hasUnsavedChanges || saving) ? 'not-allowed' : 'pointer',
-                      opacity: (!hasUnsavedChanges || saving) ? 0.6 : 1,
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    {saving ? '💾 Saving...' : hasUnsavedChanges ? '💾 Save' : '✅ Saved'}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Main Editor Area */}
+            {/* Main Editor Area - Always render CodeEditor */}
             <div style={{
               flex: 1,
               display: 'flex',
               overflow: 'hidden',
             }}>
-              {/* Code Editor */}
               <div style={{
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 padding: '24px',
               }}>
-                {currentSnippet ? (
-                  <CodeEditor
-                    value={code}
-                    language={currentSnippet.language}
-                    onChange={handleCodeChange}
-                    onJumpToLine={setJumpToLineFunction}
-                  />
-                ) : (
-                  <div style={{
-                    flex: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    textAlign: 'center',
-                    color: '#ffffff',
-                  }}>
-                    <div style={{ fontSize: '48px', marginBottom: '24px' }}>📝</div>
-                    <h2 style={{
-                      fontSize: '32px',
-                      marginBottom: '16px',
-                      fontWeight: '700',
-                      color: '#ffffff',
-                    }}>
-                      Snippet Editor
-                    </h2>
-                    <p style={{
-                      fontSize: '18px',
-                      marginBottom: '32px',
-                      opacity: '0.8',
-                      maxWidth: '400px',
-                    }}>
-                      Select a snippet from the Snippets page to edit and analyze it.
-                    </p>
-                    <button
-                      onClick={() => setCurrentPage('snippets')}
-                      style={{
-                        padding: '16px 32px',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      📝 Go to Snippets
-                    </button>
-                  </div>
-                )}
+                <CodeEditor
+                  value={code}
+                  language={currentSnippet ? currentSnippet.language : 'javascript'}
+                  onChange={handleCodeChange}
+                  onJumpToLine={setJumpToLineFunction}
+                />
               </div>
-
-              {/* AI Panel */}
+              {/* Optionally show the AI panel if a snippet is selected */}
               {currentSnippet && (
                 <div style={{
                   width: '380px',
@@ -324,7 +194,6 @@ export const MainDashboard: React.FC = () => {
                       ✨ Refactor
                     </button>
                   </div>
-
                   {/* Tab Content */}
                   <div style={{ flex: 1, overflow: 'hidden' }}>
                     {rightPanelTab === 'analysis' ? (

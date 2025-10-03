@@ -30,6 +30,10 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
+    // Force focus on mount
+    setTimeout(() => {
+      editor.focus();
+    }, 0);
     
     // Provide jump to line function to parent
     if (onJumpToLine) {

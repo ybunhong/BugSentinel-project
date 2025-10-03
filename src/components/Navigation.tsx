@@ -33,7 +33,6 @@ export const Navigation: React.FC<NavigationProps> = ({
   const navigationItems: NavigationItem[] = [
     { id: 'analysis', label: 'AI Analysis', icon: 'zap' },
     { id: 'snippets', label: 'Snippets', icon: 'snippets' },
-    { id: 'editor', label: 'Editor', icon: 'edit' },
     { id: 'settings', label: 'Settings', icon: 'settings' },
   ];
 
