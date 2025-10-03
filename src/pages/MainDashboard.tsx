@@ -156,7 +156,7 @@ export const MainDashboard: React.FC = () => {
                   language={
                     currentSnippet ? currentSnippet.language : "javascript"
                   }
-                  onChange={handleCodeChange}
+                  onCodeChange={handleCodeChange}
                   onJumpToLine={jumpToLineFunction}
                 />
               </div>

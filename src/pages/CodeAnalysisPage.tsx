@@ -22,11 +22,30 @@ export const CodeAnalysisPage: React.FC = () => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing) return;
-      const newCodeEditorWidth = e.clientX - 24; // 24px is padding on left
-      const newAnalysisPanelWidth = window.innerWidth - e.clientX - 24; // 24px is padding on right
+      const mainContentArea = document.querySelector(
+        'div[style*="flex: 1"][style*="display: flex"][style*="padding: 24px"]'
+      ) as HTMLDivElement;
+      if (!mainContentArea) return;
 
-      setCodeEditorWidth(Math.max(200, newCodeEditorWidth)); // Min width 200px
-      setAnalysisPanelWidth(Math.max(50, newAnalysisPanelWidth)); // Min width 50px
+      const parentRect = mainContentArea.getBoundingClientRect();
+      const newCodeEditorWidth = e.clientX - parentRect.left; // Calculate width relative to parent
+
+      const resizerWidth = 8; // Width of the resizer
+      const newAnalysisPanelWidth =
+        parentRect.width - newCodeEditorWidth - resizerWidth;
+
+      setCodeEditorWidth(
+        Math.max(
+          200,
+          Math.min(newCodeEditorWidth, parentRect.width - 50 - resizerWidth)
+        )
+      ); // Code editor min 200px, max (total - analysis_min - resizer)
+      setAnalysisPanelWidth(
+        Math.max(
+          50,
+          Math.min(newAnalysisPanelWidth, parentRect.width - 200 - resizerWidth)
+        )
+      ); // Analysis panel min 50px, max (total - editor_min - resizer)
     };
 
     const handleMouseUp = () => {

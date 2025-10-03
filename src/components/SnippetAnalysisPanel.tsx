@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { GeminiService } from "../services/geminiService";
 import { Button, Card } from "../components/ui";
 import type { CodeSuggestion } from "../store/types";
-import { Editor, DiffEditor } from "@monaco-editor/react";
+import { DiffEditor } from "@monaco-editor/react";
 
 interface SnippetAnalysisPanelProps {
   code: string;
