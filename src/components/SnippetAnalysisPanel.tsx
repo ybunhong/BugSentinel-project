@@ -50,9 +50,9 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
 
     setAnalyzing(true);
     setError(null);
-    setAnalysisResults([]);
-    setRefactorResult(null);
-    setCodeSuggestions([]);
+    if (analysisResults.length > 0) setAnalysisResults([]);
+    if (refactorResult !== null) setRefactorResult(null);
+    if (codeSuggestions.length > 0) setCodeSuggestions([]);
 
     try {
       const [analysisResponse, refactorResponse, suggestionsResponse] =
@@ -62,55 +62,56 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
           GeminiService.getCodeSuggestions({ code, language }),
         ]);
 
+      // Helper to process a single promise result consistently
+      const processSingleResult = (
+        response: PromiseSettledResult<any>,
+        successSetter: (data: any) => void,
+        taskName: string,
+        shouldSetGlobalError: boolean = false,
+        successAction?: () => void
+      ) => {
+        if (response.status === "fulfilled") {
+          if (response.value?.data) {
+            successSetter(response.value.data);
+            successAction?.();
+          } else if (response.value?.error) {
+            console.error(`${taskName} failed:`, response.value.error);
+            if (shouldSetGlobalError) {
+              setError(response.value.error);
+            }
+          }
+        } else if (response.status === "rejected") {
+          console.error(`${taskName} failed:`, response.reason);
+          if (shouldSetGlobalError) {
+            setError(response.reason.message || `${taskName} failed`);
+          }
+        }
+      };
+
       // Handle Analysis Results
-      if (
-        analysisResponse.status === "fulfilled" &&
-        analysisResponse.value.data
-      ) {
-        setAnalysisResults(analysisResponse.value.data);
-      } else if (
-        analysisResponse.status === "fulfilled" &&
-        analysisResponse.value.error
-      ) {
-        console.error("Analysis failed:", analysisResponse.value.error);
-        setError(analysisResponse.value.error);
-      } else if (analysisResponse.status === "rejected") {
-        console.error("Analysis failed:", analysisResponse.reason);
-        setError(analysisResponse.reason.message || "Analysis failed");
-      }
+      processSingleResult(
+        analysisResponse,
+        setAnalysisResults,
+        "Analysis",
+        true
+      );
 
       // Handle Refactoring Results
-      if (
-        refactorResponse.status === "fulfilled" &&
-        refactorResponse.value.data
-      ) {
-        setRefactorResult(refactorResponse.value.data);
-        setActiveTab("diff"); // Automatically switch to diff tab if refactor successful
-      } else if (
-        refactorResponse.status === "fulfilled" &&
-        refactorResponse.value.error
-      ) {
-        console.error("Refactoring failed:", refactorResponse.value.error);
-        // Optionally set error if refactoring is critical
-      } else if (refactorResponse.status === "rejected") {
-        console.error("Refactoring failed:", refactorResponse.reason);
-      }
+      processSingleResult(
+        refactorResponse,
+        setRefactorResult,
+        "Refactoring",
+        false, // Current behavior is not to set global error for refactor
+        () => setActiveTab("diff")
+      );
 
       // Handle Suggestions Results
-      if (
-        suggestionsResponse.status === "fulfilled" &&
-        suggestionsResponse.value.data
-      ) {
-        setCodeSuggestions(suggestionsResponse.value.data);
-      } else if (
-        suggestionsResponse.status === "fulfilled" &&
-        suggestionsResponse.value.error
-      ) {
-        console.error("Suggestions failed:", suggestionsResponse.value.error);
-        // Optionally set error if suggestions are critical
-      } else if (suggestionsResponse.status === "rejected") {
-        console.error("Suggestions failed:", suggestionsResponse.reason);
-      }
+      processSingleResult(
+        suggestionsResponse,
+        setCodeSuggestions,
+        "Suggestions",
+        false
+      ); // Current behavior is not to set global error for suggestions
     } catch (err) {
       setError(
         err instanceof Error
@@ -652,7 +653,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                   padding: "40px 20px",
                 }}
               >
-                <p>Click "Analyze All" to see the diff comparison</p>
+                <p>Click "Analyze" to see the diff comparison</p>
               </div>
             )}
 
@@ -700,8 +701,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                         modifiedAriaLabel: "Refactored code",
                         cursorBlinking: "solid", // Disable cursor blinking
                         smoothScrolling: false, // Disable smooth scrolling
-                        cursorSmoothCaretAnimation: false, // Disable smooth caret animation
-                        measurePerformance: false, // Disable performance measure events
+                        cursorSmoothCaretAnimation: "off", // Disable smooth caret animation
                       }}
                     />
                   </div>
