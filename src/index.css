@@ -1,8 +1,24 @@
 /* Import responsive styles */
-@import './styles/responsive.css';
+@import "./styles/responsive.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
 :root {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, Avenir,
+    Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -14,26 +30,40 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
   /* CSS Variables for theming */
   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --secondary-gradient: linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%);
   --accent-gradient: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
-  
+
   /* Dark theme colors */
-  --dark-bg-primary: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-  --dark-bg-secondary: rgba(15, 15, 35, 0.9);
-  --dark-bg-tertiary: rgba(26, 26, 46, 0.5);
-  --dark-border: rgba(102, 126, 234, 0.2);
-  --dark-text-primary: #ffffff;
-  --dark-text-secondary: #cccccc;
-  
+  --dark-bg-primary: linear-gradient(
+    135deg,
+    #0a0a1a 0%,
+    #1a0a2a 50%,
+    #2a0a3a 100%
+  ); /* Deep Dark Blue-Purple Gradient */
+  --dark-bg-secondary: rgba(10, 10, 20, 0.95); /* Very Dark Blue-Purple */
+  --dark-bg-tertiary: rgba(
+    30,
+    15,
+    45,
+    0.6
+  ); /* Slightly Lighter Translucent Dark Purple */
+  --dark-border: rgba(130, 100, 250, 0.5); /* Vibrant Blue-Purple Border */
+  --dark-text-primary: #f0f0f0; /* Near White */
+  --dark-text-secondary: #c0c0c0; /* Light Gray */
+
   /* Light theme colors */
-  --light-bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --light-bg-secondary: rgba(255, 255, 255, 0.9);
-  --light-bg-tertiary: rgba(255, 255, 255, 0.1);
-  --light-border: rgba(118, 75, 162, 0.2);
-  --light-text-primary: #ffffff;
+  --light-bg-primary: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #fffacd 100%
+  ); /* White to LemonChiffon */
+  --light-bg-secondary: rgba(255, 250, 240, 0.9); /* FloralWhite */
+  --light-bg-tertiary: rgba(255, 215, 0, 0.1); /* Gold translucent */
+  --light-border: rgba(255, 215, 0, 0.4); /* Gold border */
+  --light-text-primary: #333333;
   --light-text-secondary: #666666;
 }
 
@@ -46,16 +76,15 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 button {

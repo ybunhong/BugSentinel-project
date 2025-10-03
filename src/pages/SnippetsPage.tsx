@@ -149,7 +149,6 @@ export const SnippetsPage: React.FC<SnippetsPageProps> = ({
     <div
       style={{
         padding: "24px",
-        maxWidth: "1200px",
         margin: "0 auto",
       }}
     >

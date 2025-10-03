@@ -58,7 +58,6 @@ export const CodeAnalysisPage: React.FC = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            maxWidth: "1200px",
             margin: "0 auto",
           }}
         >
@@ -68,7 +67,8 @@ export const CodeAnalysisPage: React.FC = () => {
                 margin: "0 0 8px 0",
                 fontSize: "28px",
                 fontWeight: "700",
-                color: theme === "dark" ? "#ffffff" : "#000000",
+                color:
+                  theme === "dark" ? "#ffffff" : "var(--light-text-primary)",
               }}
             >
               🤖 AI Code Analysis
@@ -77,7 +77,8 @@ export const CodeAnalysisPage: React.FC = () => {
               style={{
                 margin: 0,
                 fontSize: "16px",
-                color: theme === "dark" ? "#cccccc" : "#666666",
+                color:
+                  theme === "dark" ? "#cccccc" : "var(--light-text-secondary)",
               }}
             >
               Analyze your code for bugs, get refactoring suggestions, and
@@ -127,7 +128,6 @@ export const CodeAnalysisPage: React.FC = () => {
           display: "flex",
           padding: "24px",
           gap: "24px",
-          maxWidth: "1400px",
           margin: "0 auto",
           width: "100%",
         }}
