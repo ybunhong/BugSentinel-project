@@ -1,33 +1,33 @@
-import { useState, useEffect } from 'react';
-import { useStore } from '../store/useStore';
-import { GeminiService } from '../services/geminiService';
-import { SnippetService } from '../services/snippetService';
-import { Layout } from '../components/Layout';
-import { SnippetsPage } from './SnippetsPage';
-import { CodeAnalysisPage } from './CodeAnalysisPage';
-import { SettingsPage } from './SettingsPage';
-import { CodeEditor } from '../components/CodeEditor';
-import { AnalysisPanel } from '../components/AnalysisPanel';
-import { RefactorPanel } from '../components/RefactorPanel';
-import { SnippetForm } from '../components/SnippetForm';
-import type { Snippet } from '../store/types';
+import { useState, useEffect } from "react";
+import { useStore } from "../store/useStore";
+import { SnippetService } from "../services/snippetService";
+import { GeminiService } from "../services/geminiService";
+import { Layout } from "../components/Layout";
+import { SnippetsPage } from "./SnippetsPage";
+import { CodeAnalysisPage } from "./CodeAnalysisPage";
+import { SettingsPage } from "./SettingsPage";
+import { CodeEditor } from "../components/CodeEditor";
+import { SnippetAnalysisPanel } from "../components/SnippetAnalysisPanel";
+import { SnippetForm } from "../components/SnippetForm";
+import type { Snippet } from "../store/types";
 
 export const MainDashboard: React.FC = () => {
   const { currentSnippet, theme } = useStore();
-  const [currentPage, setCurrentPage] = useState('analysis');
+  const [currentPage, setCurrentPage] = useState("analysis");
   const [showSnippetForm, setShowSnippetForm] = useState(false);
   const [editingSnippet, setEditingSnippet] = useState<Snippet | null>(null);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'analysis' | 'refactor'>('analysis');
-  const [jumpToLineFunction, setJumpToLineFunction] = useState<((line: number) => void) | undefined>(undefined);
+  const [jumpToLineFunction, setJumpToLineFunction] = useState<
+    ((line: number) => void) | undefined
+  >(undefined);
 
   // Initialize services
   useEffect(() => {
     GeminiService.initialize();
     SnippetService.initializeSync();
-    
+
     return () => {
       SnippetService.cleanupSync();
     };
@@ -39,16 +39,16 @@ export const MainDashboard: React.FC = () => {
       setCode(currentSnippet.code);
       setHasUnsavedChanges(false);
     } else {
-      setCode('// Select a snippet to start editing...\n');
+      setCode("// Select a snippet to start editing...\n");
       setHasUnsavedChanges(false);
       setJumpToLineFunction(undefined);
     }
   }, [currentSnippet]);
 
   const handleCodeChange = (newCode: string | undefined) => {
-    const codeValue = newCode || '';
+    const codeValue = newCode || "";
     setCode(codeValue);
-    
+
     if (currentSnippet && codeValue !== currentSnippet.code) {
       setHasUnsavedChanges(true);
     } else {
@@ -65,7 +65,7 @@ export const MainDashboard: React.FC = () => {
     });
 
     if (result.error) {
-      alert('Failed to save: ' + result.error);
+      alert("Failed to save: " + result.error);
     } else {
       setHasUnsavedChanges(false);
     }
@@ -74,9 +74,8 @@ export const MainDashboard: React.FC = () => {
 
   const handleEditSnippet = (snippet: Snippet) => {
     SnippetService.setCurrentSnippet(snippet);
-    setCurrentPage('editor');
+    setCurrentPage("editor");
   };
-
 
   const handleEditSnippetInfo = () => {
     if (currentSnippet) {
@@ -98,116 +97,80 @@ export const MainDashboard: React.FC = () => {
 
   const renderPageContent = () => {
     switch (currentPage) {
-      case 'snippets':
-        return <SnippetsPage onEditSnippet={handleEditSnippet} />;
-      
-      case 'analysis':
+      case "analysis":
         return <CodeAnalysisPage />;
-      
-      case 'settings':
+
+      case "snippets":
+        return <SnippetsPage onEditSnippet={handleEditSnippet} />;
+
+      case "settings":
         return <SettingsPage />;
-      
-      case 'editor':
+
+      case "editor":
         return (
-          <div style={{
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
-            {/* Main Editor Area - Always render CodeEditor */}
-            <div style={{
-              flex: 1,
-              display: 'flex',
-              overflow: 'hidden',
-            }}>
-              <div style={{
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* Main Editor Area */}
+            <div
+              style={{
                 flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '24px',
-              }}>
+                display: "flex",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "24px",
+                }}
+              >
                 <CodeEditor
                   value={code}
-                  language={currentSnippet ? currentSnippet.language : 'javascript'}
+                  language={
+                    currentSnippet ? currentSnippet.language : "javascript"
+                  }
                   onChange={handleCodeChange}
                   onJumpToLine={setJumpToLineFunction}
                 />
               </div>
-              {/* Optionally show the AI panel if a snippet is selected */}
-              {currentSnippet && (
-                <div style={{
-                  width: '380px',
-                  background: theme === 'dark' 
-                    ? 'rgba(15, 15, 35, 0.9)'
-                    : 'rgba(255, 255, 255, 0.9)',
-                  backdropFilter: 'blur(20px)',
-                  borderLeft: theme === 'dark'
-                    ? '1px solid rgba(102, 126, 234, 0.2)'
-                    : '1px solid rgba(118, 75, 162, 0.2)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}>
-                  {/* Tab Header */}
-                  <div style={{
-                    display: 'flex',
-                    borderBottom: theme === 'dark'
-                      ? '1px solid rgba(102, 126, 234, 0.2)'
-                      : '1px solid rgba(118, 75, 162, 0.2)',
-                    background: theme === 'dark' 
-                      ? 'rgba(26, 26, 46, 0.8)'
-                      : 'rgba(255, 255, 255, 0.8)',
-                  }}>
-                    <button
-                      onClick={() => setRightPanelTab('analysis')}
-                      style={{
-                        flex: 1,
-                        padding: '16px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        background: rightPanelTab === 'analysis' 
-                          ? 'linear-gradient(135deg, #667eea, #764ba2)'
-                          : 'transparent',
-                        color: rightPanelTab === 'analysis' ? '#ffffff' : (theme === 'dark' ? '#cccccc' : '#666666'),
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      🔍 Analysis
-                    </button>
-                    <button
-                      onClick={() => setRightPanelTab('refactor')}
-                      style={{
-                        flex: 1,
-                        padding: '16px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        background: rightPanelTab === 'refactor' 
-                          ? 'linear-gradient(135deg, #ff6b6b, #ffa500)'
-                          : 'transparent',
-                        color: rightPanelTab === 'refactor' ? '#ffffff' : (theme === 'dark' ? '#cccccc' : '#666666'),
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      ✨ Refactor
-                    </button>
-                  </div>
-                  {/* Tab Content */}
-                  <div style={{ flex: 1, overflow: 'hidden' }}>
-                    {rightPanelTab === 'analysis' ? (
-                      <AnalysisPanel onJumpToLine={jumpToLineFunction} />
-                    ) : (
-                      <RefactorPanel onCodeChange={setCode} />
-                    )}
-                  </div>
-                </div>
-              )}
+
+              {/* AI Analysis Panel */}
+              <div
+                style={{
+                  width: "400px",
+                  background:
+                    theme === "dark"
+                      ? "rgba(15, 15, 35, 0.9)"
+                      : "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(20px)",
+                  borderLeft:
+                    theme === "dark"
+                      ? "1px solid rgba(102, 126, 234, 0.2)"
+                      : "1px solid rgba(118, 75, 162, 0.2)",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <SnippetAnalysisPanel
+                  code={code}
+                  language={
+                    currentSnippet ? currentSnippet.language : "javascript"
+                  }
+                  onCodeChange={handleCodeChange}
+                  onJumpToLine={jumpToLineFunction}
+                />
+              </div>
             </div>
           </div>
         );
-      
+
       default:
         return <CodeAnalysisPage />;
     }
@@ -216,7 +179,7 @@ export const MainDashboard: React.FC = () => {
   return (
     <Layout currentPage={currentPage} onPageChange={setCurrentPage}>
       {renderPageContent()}
-      
+
       {/* Snippet Form Modal */}
       {showSnippetForm && (
         <SnippetForm

@@ -2,14 +2,11 @@ import { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import { SnippetService } from '../services/snippetService';
 import { PreferencesService } from '../services/preferencesService';
-import { GeminiService } from '../services/geminiService';
 import { SupabaseService } from '../services/supabaseService';
 import { LocalStorageService } from '../services/localStorageService';
 import { CodeEditor } from './CodeEditor';
 import { SnippetList } from './SnippetList';
 import { SnippetForm } from './SnippetForm';
-import { AnalysisPanel } from './AnalysisPanel';
-import { RefactorPanel } from './RefactorPanel';
 import { ThemeToggle } from './ThemeToggle';
 import { ConnectionStatus } from './ConnectionStatus';
 import type { Snippet } from '../store/types';
@@ -21,14 +18,11 @@ export const Dashboard: React.FC = () => {
   const [code, setCode] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'analysis' | 'refactor'>('analysis');
   const [jumpToLineFunction, setJumpToLineFunction] = useState<((line: number) => void) | undefined>(undefined);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [showRightPanel, setShowRightPanel] = useState(true);
 
   // Initialize services on component mount
   useEffect(() => {
-    GeminiService.initialize();
     SnippetService.initializeSync();
     
     // Cleanup on unmount
@@ -553,110 +547,7 @@ export const Dashboard: React.FC = () => {
           )}
         </main>
 
-        {/* AI Analysis Panel */}
-        {showRightPanel && (
-          <aside style={{
-            width: isMobile ? '100%' : '380px',
-            height: isMobile ? '300px' : 'auto',
-            background: theme === 'dark' 
-              ? 'rgba(15, 15, 35, 0.9)'
-              : 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(20px)',
-            borderLeft: !isMobile ? (theme === 'dark'
-              ? '1px solid rgba(102, 126, 234, 0.2)'
-              : '1px solid rgba(118, 75, 162, 0.2)') : 'none',
-            borderTop: isMobile ? (theme === 'dark'
-              ? '1px solid rgba(102, 126, 234, 0.2)'
-              : '1px solid rgba(118, 75, 162, 0.2)') : 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            boxShadow: theme === 'dark'
-              ? (isMobile ? '0 -8px 32px rgba(102, 126, 234, 0.1)' : '-8px 0 32px rgba(102, 126, 234, 0.1)')
-              : (isMobile ? '0 -8px 32px rgba(118, 75, 162, 0.1)' : '-8px 0 32px rgba(118, 75, 162, 0.1)'),
-          }}>
-            {/* Tab Header */}
-            <div style={{
-              display: 'flex',
-              borderBottom: theme === 'dark'
-                ? '1px solid rgba(102, 126, 234, 0.2)'
-                : '1px solid rgba(118, 75, 162, 0.2)',
-              background: theme === 'dark' 
-                ? 'rgba(26, 26, 46, 0.8)'
-                : 'rgba(255, 255, 255, 0.8)',
-              backdropFilter: 'blur(10px)',
-            }}>
-              <button
-                onClick={() => setRightPanelTab('analysis')}
-                style={{
-                  flex: 1,
-                  padding: '16px 20px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  background: rightPanelTab === 'analysis' 
-                    ? 'linear-gradient(135deg, #667eea, #764ba2)'
-                    : 'transparent',
-                  color: rightPanelTab === 'analysis' ? '#ffffff' : (theme === 'dark' ? '#cccccc' : '#666666'),
-                  border: 'none',
-                  borderRadius: rightPanelTab === 'analysis' ? '12px 12px 0 0' : '0',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  boxShadow: rightPanelTab === 'analysis' ? '0 4px 15px rgba(102, 126, 234, 0.2)' : 'none',
-                }}
-                onMouseEnter={(e) => {
-                  if (rightPanelTab !== 'analysis') {
-                    e.currentTarget.style.background = 'rgba(102, 126, 234, 0.1)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (rightPanelTab !== 'analysis') {
-                    e.currentTarget.style.background = 'transparent';
-                  }
-                }}
-              >
-                🔍 Analysis
-              </button>
-              <button
-                onClick={() => setRightPanelTab('refactor')}
-                style={{
-                  flex: 1,
-                  padding: '16px 20px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  background: rightPanelTab === 'refactor' 
-                    ? 'linear-gradient(135deg, #ff6b6b, #ffa500)'
-                    : 'transparent',
-                  color: rightPanelTab === 'refactor' ? '#ffffff' : (theme === 'dark' ? '#cccccc' : '#666666'),
-                  border: 'none',
-                  borderRadius: rightPanelTab === 'refactor' ? '12px 12px 0 0' : '0',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  boxShadow: rightPanelTab === 'refactor' ? '0 4px 15px rgba(255, 107, 107, 0.2)' : 'none',
-                }}
-                onMouseEnter={(e) => {
-                  if (rightPanelTab !== 'refactor') {
-                    e.currentTarget.style.background = 'rgba(255, 107, 107, 0.1)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (rightPanelTab !== 'refactor') {
-                    e.currentTarget.style.background = 'transparent';
-                  }
-                }}
-              >
-                ✨ Refactor
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            <div style={{ flex: 1, overflow: 'hidden' }}>
-              {rightPanelTab === 'analysis' ? (
-                <AnalysisPanel onJumpToLine={jumpToLineFunction} />
-              ) : (
-                <RefactorPanel onCodeChange={setCode} />
-              )}
-            </div>
-          </aside>
-        )}
+        </div>
       </div>
 
       {/* Snippet Form Modal */}

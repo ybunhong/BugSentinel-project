@@ -18,28 +18,44 @@ export interface Snippet {
 
 export interface AnalysisResult {
   id: string;
-  type: 'syntax' | 'logic' | 'security' | 'performance';
-  severity: 'low' | 'medium' | 'high';
+  type: "syntax" | "logic" | "security" | "performance" | "style";
+  severity: "low" | "medium" | "high";
   message: string;
   line: number;
   column: number;
   suggestion?: string;
+  fixedCode?: string;
+}
+
+export interface RefactorResult {
+  originalCode: string;
+  refactoredCode: string;
+  explanation: string;
+  improvements: string[];
+}
+
+export interface CodeSuggestion {
+  suggestion: string;
+  code: string;
+  explanation: string;
 }
 
 export interface AppState {
   // User session
   user: User | null;
   isAuthenticated: boolean;
-  
+
   // Snippets
   snippets: Snippet[];
   currentSnippet: Snippet | null;
-  
+
   // Analysis
   analysisResults: AnalysisResult[];
   isAnalyzing: boolean;
-  
+  refactorResult: RefactorResult | null;
+  codeSuggestions: CodeSuggestion[];
+
   // UI state
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
   sidebarOpen: boolean;
 }
