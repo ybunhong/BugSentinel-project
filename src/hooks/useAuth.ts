@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useStore } from '../store/useStore';
-import { SupabaseService } from '../services/supabaseService';
-import { PreferencesService } from '../services/preferencesService';
+import { useEffect } from "react";
+import { useStore } from "../store/useStore";
+import { SupabaseService } from "../services/supabaseService";
+import { PreferencesService } from "../services/preferencesService";
 
 export const useAuth = () => {
   const { setUser, setAuthenticated, user, isAuthenticated } = useStore();
@@ -13,11 +13,11 @@ export const useAuth = () => {
       if (currentUser) {
         setUser({
           id: currentUser.id,
-          email: currentUser.email || '',
-          name: currentUser.user_metadata?.name
+          email: currentUser.email || "",
+          name: currentUser.user_metadata?.name || undefined,
         });
         setAuthenticated(true);
-        
+
         // Load user preferences after authentication
         await PreferencesService.loadPreferences();
       }
@@ -26,15 +26,18 @@ export const useAuth = () => {
     checkSession();
 
     // Listen for auth state changes
-    const { data: { subscription } } = SupabaseService.onAuthStateChange(async (user) => {
+    const {
+      data: { subscription },
+    } = SupabaseService.onAuthStateChange(async (event, session) => {
+      const user = session?.user || null;
       if (user) {
         setUser({
           id: user.id,
-          email: user.email || '',
-          name: user.user_metadata?.name
+          email: user.email || "",
+          name: user.user_metadata?.name || undefined,
         });
         setAuthenticated(true);
-        
+
         // Load user preferences on login
         await PreferencesService.loadPreferences();
       } else {
@@ -52,6 +55,6 @@ export const useAuth = () => {
   return {
     user,
     isAuthenticated,
-    loading: false // You can add loading state if needed
+    loading: false, // You can add loading state if needed
   };
 };

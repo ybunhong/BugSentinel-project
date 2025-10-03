@@ -18,7 +18,6 @@ export const MainDashboard: React.FC = () => {
   const [editingSnippet, setEditingSnippet] = useState<Snippet | null>(null);
   const [code, setCode] = useState("");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [jumpToLineFunction, setJumpToLineFunction] = useState<
     ((line: number) => void) | undefined
   >(undefined);
@@ -56,32 +55,14 @@ export const MainDashboard: React.FC = () => {
     }
   };
 
-  const handleSaveCode = async () => {
-    if (!currentSnippet || !hasUnsavedChanges) return;
-
-    setSaving(true);
-    const result = await SnippetService.updateSnippet(currentSnippet.id, {
-      code: code,
-    });
-
-    if (result.error) {
-      alert("Failed to save: " + result.error);
-    } else {
-      setHasUnsavedChanges(false);
-    }
-    setSaving(false);
+  const handleCreateSnippet = () => {
+    setEditingSnippet(null);
+    setShowSnippetForm(true);
   };
 
   const handleEditSnippet = (snippet: Snippet) => {
     SnippetService.setCurrentSnippet(snippet);
     setCurrentPage("editor");
-  };
-
-  const handleEditSnippetInfo = () => {
-    if (currentSnippet) {
-      setEditingSnippet(currentSnippet);
-      setShowSnippetForm(true);
-    }
   };
 
   const handleSnippetFormSave = (snippet: Snippet) => {

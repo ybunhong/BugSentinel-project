@@ -237,7 +237,10 @@ export const ConnectionStatus: React.FC = () => {
               <span>Last Sync:</span>
               <span style={{ color: theme === "dark" ? "#cccccc" : "#666666" }}>
                 {connectionStatus.lastSync
-                  ? new Date(connectionStatus.lastSync).toLocaleTimeString()
+                  ? new Date(connectionStatus.lastSync).toLocaleTimeString(
+                      "en-US",
+                      { hour: "2-digit", minute: "2-digit", second: "2-digit" }
+                    )
                   : "Never"}
               </span>
             </div>

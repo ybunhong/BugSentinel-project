@@ -2,11 +2,7 @@ import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { GeminiService } from "../services/geminiService";
 import { Button, Card } from "../components/ui";
-import type {
-  AnalysisResult,
-  RefactorResult,
-  CodeSuggestion,
-} from "../store/types";
+import type { CodeSuggestion } from "../store/types";
 
 interface SnippetAnalysisPanelProps {
   code: string;

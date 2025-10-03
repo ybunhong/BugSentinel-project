@@ -4,7 +4,6 @@ import {
   type LocalPreferences,
 } from "./localStorageService";
 import { SupabaseService } from "./supabaseService";
-import { PreferencesService } from "./preferencesService";
 import { useStore } from "../store/useStore";
 import type { Snippet } from "../store/types";
 
@@ -13,6 +12,7 @@ export class SyncService {
   private static syncInProgress = false;
   private static retryCount = 0;
   private static maxRetries = 3;
+  private static _lastSyncTimestamp: Date | null = null; // Added to track last sync time
 
   static initialize(): void {
     // Listen for online/offline events
@@ -52,6 +52,7 @@ export class SyncService {
       await this.syncFromServer();
       LocalStorageService.clearSyncQueue();
       this.retryCount = 0;
+      this._lastSyncTimestamp = new Date(); // Update last sync timestamp on successful sync
     } catch (error) {
       console.error("Sync failed:", error);
       this.retryCount++;
@@ -290,11 +291,13 @@ export class SyncService {
     isOnline: boolean;
     syncInProgress: boolean;
     pendingChanges: number;
+    lastSync: Date | null; // Added lastSync to the return type
   } {
     return {
       isOnline: this.isOnline,
       syncInProgress: this.syncInProgress,
       pendingChanges: LocalStorageService.getSyncQueue().length,
+      lastSync: this._lastSyncTimestamp, // Return the last sync timestamp
     };
   }
 

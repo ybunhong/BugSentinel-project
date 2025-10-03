@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useStore } from "../store/useStore";
-import { GeminiService } from "../services/geminiService";
 import { CodeEditor } from "../components/CodeEditor";
 import { SnippetAnalysisPanel } from "../components/SnippetAnalysisPanel";
 import { Button } from "../components/ui";
