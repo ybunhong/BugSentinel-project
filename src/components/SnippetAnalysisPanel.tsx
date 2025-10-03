@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "../store/useStore";
 import { GeminiService } from "../services/geminiService";
 import { Button, Card } from "../components/ui";
 import type { CodeSuggestion } from "../store/types";
+import { Editor, DiffEditor } from "@monaco-editor/react";
 
 interface SnippetAnalysisPanelProps {
   code: string;
@@ -179,8 +180,9 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
       <div
         style={{
           padding: "16px",
-          borderBottom: `1px solid ${theme === "dark" ? "#3e3e42" : "#dee2e6"}`,
           backgroundColor: theme === "dark" ? "#2d2d30" : "#ffffff",
+          cursor: "pointer", // Indicate interactivity
+          borderBottom: `1px solid ${theme === "dark" ? "#3e3e42" : "#dee2e6"}`,
         }}
       >
         <div
@@ -188,7 +190,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "12px",
+            marginBottom: "12px", // Remove margin when collapsed
           }}
         >
           <h3
@@ -443,7 +445,10 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                                 Fixed code:
                               </div>
                               <pre
-                                style={{ margin: 0, whiteSpace: "pre-wrap" }}
+                                style={{
+                                  margin: 0,
+                                  whiteSpace: "pre-wrap",
+                                }}
                               >
                                 {result.fixedCode}
                               </pre>
@@ -673,75 +678,32 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
 
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
+                      display: "flex",
+                      flexDirection: "column",
                       gap: "20px",
                       marginTop: "20px",
+                      height: "80vh", // Increased height to make it bigger
                     }}
                   >
-                    <div>
-                      <h4
-                        style={{
-                          margin: "0 0 8px 0",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          color: "#dc3545",
-                        }}
-                      >
-                        Original Code
-                      </h4>
-                      <div
-                        style={{
-                          padding: "12px",
-                          backgroundColor:
-                            theme === "dark"
-                              ? "rgba(0, 0, 0, 0.3)"
-                              : "rgba(0, 0, 0, 0.05)",
-                          borderRadius: "6px",
-                          fontSize: "12px",
-                          fontFamily: "Monaco, Consolas, monospace",
-                          maxHeight: "300px",
-                          overflow: "auto",
-                          border: "1px solid rgba(255,0,0,0.2)",
-                        }}
-                      >
-                        <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                          {refactorResult.originalCode}
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4
-                        style={{
-                          margin: "0 0 8px 0",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          color: "#28a745",
-                        }}
-                      >
-                        Refactored Code
-                      </h4>
-                      <div
-                        style={{
-                          padding: "12px",
-                          backgroundColor:
-                            theme === "dark"
-                              ? "rgba(0, 0, 0, 0.3)"
-                              : "rgba(0, 0, 0, 0.05)",
-                          borderRadius: "6px",
-                          fontSize: "12px",
-                          fontFamily: "Monaco, Consolas, monospace",
-                          maxHeight: "300px",
-                          overflow: "auto",
-                          border: "1px solid rgba(40,167,69,0.2)",
-                        }}
-                      >
-                        <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                          {refactorResult.refactoredCode}
-                        </pre>
-                      </div>
-                    </div>
+                    <DiffEditor
+                      height="100%"
+                      language={language}
+                      original={refactorResult.originalCode}
+                      modified={refactorResult.refactoredCode}
+                      theme="vs-dark" // Always dark theme as requested
+                      options={{
+                        readOnly: true,
+                        renderSideBySide: false, // Display original on top, modified on bottom
+                        minimap: { enabled: false },
+                        // Optional: Add line numbers if desired for better comparison
+                        originalAriaLabel: "Original code",
+                        modifiedAriaLabel: "Refactored code",
+                        cursorBlinking: "solid", // Disable cursor blinking
+                        smoothScrolling: false, // Disable smooth scrolling
+                        cursorSmoothCaretAnimation: false, // Disable smooth caret animation
+                        measurePerformance: false, // Disable performance measure events
+                      }}
+                    />
                   </div>
                 </Card>
 
@@ -753,6 +715,21 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                   style={{ alignSelf: "flex-start" }}
                 >
                   Apply Refactored Code
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={() => {
+                    if (refactorResult) {
+                      navigator.clipboard.writeText(
+                        refactorResult.refactoredCode
+                      );
+                    }
+                  }}
+                  leftIcon="📋"
+                  style={{ alignSelf: "flex-start", marginLeft: "12px" }} // Add some margin
+                >
+                  Copy Fixed Code
                 </Button>
               </div>
             )}

@@ -20,6 +20,9 @@ export const MainDashboard: React.FC = () => {
   const [jumpToLineFunction, setJumpToLineFunction] = useState<
     ((line: number) => void) | undefined
   >(undefined);
+  const [analysisPanelWidth, setAnalysisPanelWidth] = useState(400); // Initial width
+  const [isResizing, setIsResizing] = useState(false);
+  const [codeEditorWidth, setCodeEditorWidth] = useState(700); // Initial width for code editor
 
   // Initialize services
   useEffect(() => {
@@ -100,9 +103,9 @@ export const MainDashboard: React.FC = () => {
             >
               <div
                 style={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
+                  width: `${codeEditorWidth}px`, // Fixed width for code editor
+                  flexShrink: 0,
+                  flexGrow: 0,
                   padding: "24px",
                 }}
               >
@@ -116,10 +119,24 @@ export const MainDashboard: React.FC = () => {
                 />
               </div>
 
+              {/* Resizer */}
+              <div
+                style={{
+                  width: "8px",
+                  cursor: "ew-resize",
+                  backgroundColor: theme === "dark" ? "#3e3e42" : "#dee2e6",
+                  flexShrink: 0, // Prevent shrinking
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setIsResizing(true);
+                }}
+              />
+
               {/* AI Analysis Panel */}
               <div
                 style={{
-                  width: "400px",
+                  width: `${analysisPanelWidth}px`, // Dynamic width
                   background:
                     theme === "dark"
                       ? "rgba(15, 15, 35, 0.9)"
@@ -131,6 +148,7 @@ export const MainDashboard: React.FC = () => {
                       : "1px solid rgba(118, 75, 162, 0.2)",
                   display: "flex",
                   flexDirection: "column",
+                  overflow: "hidden", // Hide overflow when resizing
                 }}
               >
                 <SnippetAnalysisPanel
@@ -138,7 +156,7 @@ export const MainDashboard: React.FC = () => {
                   language={
                     currentSnippet ? currentSnippet.language : "javascript"
                   }
-                  onCodeChange={handleCodeChange}
+                  onChange={handleCodeChange}
                   onJumpToLine={jumpToLineFunction}
                 />
               </div>
@@ -150,6 +168,57 @@ export const MainDashboard: React.FC = () => {
         return <CodeAnalysisPage />;
     }
   };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      const mainEditorArea = document.querySelector(
+        'div[style*="flex: 1"][style*="display: flex"][style*="overflow: hidden"]'
+      ) as HTMLDivElement;
+      if (!mainEditorArea) return; // Should not happen
+
+      const parentRect = mainEditorArea.getBoundingClientRect();
+      const newCodeEditorWidth = e.clientX - parentRect.left; // Calculate width relative to parent
+
+      const resizerWidth = 8; // Width of the resizer
+      const newAnalysisPanelWidth =
+        parentRect.width - newCodeEditorWidth - resizerWidth;
+
+      setCodeEditorWidth(
+        Math.max(
+          200,
+          Math.min(newCodeEditorWidth, parentRect.width - 50 - resizerWidth)
+        )
+      ); // Code editor min 200px, max (total - analysis_min - resizer)
+      setAnalysisPanelWidth(
+        Math.max(
+          50,
+          Math.min(newAnalysisPanelWidth, parentRect.width - 200 - resizerWidth)
+        )
+      ); // Analysis panel min 50px, max (total - editor_min - resizer)
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "ew-resize"; // Set cursor globally
+      document.body.style.userSelect = "none"; // Disable text selection
+    } else {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = ""; // Reset cursor
+      document.body.style.userSelect = ""; // Re-enable text selection
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing]);
 
   return (
     <Layout currentPage={currentPage} onPageChange={setCurrentPage}>

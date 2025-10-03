@@ -111,7 +111,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   return (
     <div
       style={{
-        height: window.innerWidth < 768 ? "300px" : "400px",
+        height: window.innerWidth < 768 ? "200px" : "300px", // Reduced default height
         border: "none",
         borderRadius: "12px",
         overflow: "hidden",
@@ -159,7 +159,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           automaticLayout: true,
           tabSize: 2,
           insertSpaces: true,
-          wordWrap: "on",
+          wordWrap: "off", // Disable word wrap for horizontal scrolling
           contextmenu: true,
           selectOnLineNumbers: true,
           glyphMargin: true,

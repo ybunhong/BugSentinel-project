@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "../store/useStore";
 import { CodeEditor } from "../components/CodeEditor";
 import { SnippetAnalysisPanel } from "../components/SnippetAnalysisPanel";
@@ -13,6 +13,43 @@ export const CodeAnalysisPage: React.FC = () => {
   const [jumpToLineFunction, setJumpToLineFunction] = useState<
     ((line: number) => void) | undefined
   >(undefined);
+
+  const [analysisPanelWidth, setAnalysisPanelWidth] = useState(450); // Initial width
+  const [isResizing, setIsResizing] = useState(false);
+
+  const [codeEditorWidth, setCodeEditorWidth] = useState(700); // Initial width for code editor
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      const newCodeEditorWidth = e.clientX - 24; // 24px is padding on left
+      const newAnalysisPanelWidth = window.innerWidth - e.clientX - 24; // 24px is padding on right
+
+      setCodeEditorWidth(Math.max(200, newCodeEditorWidth)); // Min width 200px
+      setAnalysisPanelWidth(Math.max(50, newAnalysisPanelWidth)); // Min width 50px
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "ew-resize"; // Set cursor globally
+      document.body.style.userSelect = "none"; // Disable text selection
+    } else {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = ""; // Reset cursor
+      document.body.style.userSelect = ""; // Re-enable text selection
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing]);
 
   const supportedLanguages = [
     { value: "javascript", label: "JavaScript" },
@@ -134,7 +171,6 @@ export const CodeAnalysisPage: React.FC = () => {
         {/* Code Editor */}
         <div
           style={{
-            flex: 1,
             display: "flex",
             flexDirection: "column",
             background: "rgba(255, 255, 255, 0.1)",
@@ -142,6 +178,9 @@ export const CodeAnalysisPage: React.FC = () => {
             padding: "24px",
             backdropFilter: "blur(10px)",
             border: "1px solid rgba(255, 255, 255, 0.2)",
+            width: `${codeEditorWidth}px`, // Fixed width for code editor
+            flexShrink: 0,
+            flexGrow: 0,
           }}
         >
           <div
@@ -185,12 +224,27 @@ export const CodeAnalysisPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Resizer */}
+        <div
+          style={{
+            width: "8px",
+            cursor: "ew-resize",
+            backgroundColor: theme === "dark" ? "#3e3e42" : "#dee2e6",
+            flexShrink: 0,
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            setIsResizing(true);
+          }}
+        />
+
         {/* AI Analysis Panel */}
         <div
           style={{
-            width: "450px",
+            width: `${analysisPanelWidth}px`, // Dynamic width
             display: "flex",
             flexDirection: "column",
+            overflow: "hidden",
           }}
         >
           <SnippetAnalysisPanel
