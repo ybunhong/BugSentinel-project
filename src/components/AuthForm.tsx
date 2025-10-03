@@ -26,7 +26,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
       if (isLogin) {
         const { data, error } = await SupabaseService.signIn(email, password);
         if (error) {
-          setError(error instanceof Error ? error.message : error);
+          setError(
+            error && typeof error === "object" && "message" in error
+              ? error.message
+              : String(error)
+          );
         } else if (data.user) {
           setUser({
             id: data.user.id,
@@ -40,7 +44,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
       } else {
         const { data, error } = await SupabaseService.signUp(email, password);
         if (error) {
-          setError(error instanceof Error ? error.message : error);
+          setError(
+            error && typeof error === "object" && "message" in error
+              ? error.message
+              : String(error)
+          );
         } else if (data.user) {
           setSuccess(
             "Account created! Please check your email to verify your account."
@@ -60,7 +68,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setLoading(true);
     const { error } = await SupabaseService.signOut();
     if (error) {
-      setError(error instanceof Error ? error.message : error);
+      setError(error); // error is already string | null from service
     } else {
       setUser(null);
       setAuthenticated(false);

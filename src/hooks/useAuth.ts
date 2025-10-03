@@ -9,8 +9,9 @@ export const useAuth = () => {
   useEffect(() => {
     // Check for existing session on app load
     const checkSession = async () => {
-      const currentUser = await SupabaseService.getCurrentUser();
-      if (currentUser) {
+      const { user: currentUser, error: currentUserError } =
+        await SupabaseService.getCurrentUser();
+      if (currentUser && !currentUserError) {
         setUser({
           id: currentUser.id,
           email: currentUser.email || "",
@@ -28,8 +29,7 @@ export const useAuth = () => {
     // Listen for auth state changes
     const {
       data: { subscription },
-    } = SupabaseService.onAuthStateChange(async (event, session) => {
-      const user = session?.user || null;
+    } = SupabaseService.onAuthStateChange(async (user) => {
       if (user) {
         setUser({
           id: user.id,

@@ -17,7 +17,6 @@ export const MainDashboard: React.FC = () => {
   const [showSnippetForm, setShowSnippetForm] = useState(false);
   const [editingSnippet, setEditingSnippet] = useState<Snippet | null>(null);
   const [code, setCode] = useState("");
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [jumpToLineFunction, setJumpToLineFunction] = useState<
     ((line: number) => void) | undefined
   >(undefined);
@@ -36,10 +35,10 @@ export const MainDashboard: React.FC = () => {
   useEffect(() => {
     if (currentSnippet) {
       setCode(currentSnippet.code);
-      setHasUnsavedChanges(false);
+      // setHasUnsavedChanges(false); // Removed unused state
     } else {
       setCode("// Select a snippet to start editing...\n");
-      setHasUnsavedChanges(false);
+      // setHasUnsavedChanges(false); // Removed unused state
       setJumpToLineFunction(undefined);
     }
   }, [currentSnippet]);
@@ -49,15 +48,10 @@ export const MainDashboard: React.FC = () => {
     setCode(codeValue);
 
     if (currentSnippet && codeValue !== currentSnippet.code) {
-      setHasUnsavedChanges(true);
+      // setHasUnsavedChanges(true); // Removed unused state
     } else {
-      setHasUnsavedChanges(false);
+      // setHasUnsavedChanges(false); // Removed unused state
     }
-  };
-
-  const handleCreateSnippet = () => {
-    setEditingSnippet(null);
-    setShowSnippetForm(true);
   };
 
   const handleEditSnippet = (snippet: Snippet) => {
