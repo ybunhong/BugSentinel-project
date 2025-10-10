@@ -32,6 +32,24 @@ export class GeminiService {
     resetTime: Date.now() + 3600000, // 1 hour
   };
 
+  private static cache = new Map<string, {
+    analysisResults: AnalysisResult[];
+    refactorResult: RefactorResult | null;
+    codeSuggestions: CodeSuggestion[];
+    timestamp: number;
+  }>();
+  private static readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+  private static hashCode(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString();
+  }
+
   static initialize(): void {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (apiKey) {
@@ -302,6 +320,140 @@ Focus on:
       return {
         data: null,
         error: error instanceof Error ? error.message : "Suggestions failed",
+      };
+    }
+  }
+
+  static async analyzeAll(params: {
+    code: string;
+    language: string;
+  }): Promise<{
+    analysisResults: AnalysisResult[];
+    refactorResult: RefactorResult | null;
+    codeSuggestions: CodeSuggestion[];
+    error: string | null;
+  }> {
+    try {
+      const { code, language } = params;
+      const cacheKey = this.hashCode(code + language);
+
+      // Check cache
+      const cached = this.cache.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
+        return {
+          analysisResults: cached.analysisResults,
+          refactorResult: cached.refactorResult,
+          codeSuggestions: cached.codeSuggestions,
+          error: null,
+        };
+      }
+
+      const prompt = `Analyze this ${language} code comprehensively. Provide analysis, refactoring suggestions, and code improvements in one response.
+
+Code to analyze:
+\`\`\`${language}
+${code}
+\`\`\`
+
+Please provide a detailed analysis in the following JSON format:
+{
+  "analysis": {
+    "issues": [
+      {
+        "type": "syntax|logic|security|performance|style",
+        "severity": "low|medium|high",
+        "message": "Description of the issue",
+        "line": 1,
+        "column": 1,
+        "suggestion": "How to fix this issue",
+        "fixedCode": "Corrected code snippet"
+      }
+    ]
+  },
+  "refactoring": {
+    "refactoredCode": "The improved code",
+    "explanation": "Explanation of the refactoring changes",
+    "improvements": [
+      "List of specific improvements made"
+    ]
+  },
+  "suggestions": [
+    {
+      "suggestion": "Brief description of the suggestion",
+      "code": "Improved code snippet",
+      "explanation": "Detailed explanation of the improvement"
+    }
+  ]
+}
+
+Focus on:
+- Syntax errors, logic bugs, security vulnerabilities, performance issues, code style
+- Refactoring for better structure, readability, maintainability
+- Modern language features, performance improvements, best practices
+
+Be specific with line numbers and provide actionable suggestions.`;
+
+      const response = await this.makeRequest(prompt);
+
+      try {
+        const jsonMatch = response.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+          throw new Error("No JSON found in response");
+        }
+
+        const result = JSON.parse(jsonMatch[0]);
+
+        const analysisResults: AnalysisResult[] = (result.analysis?.issues || []).map(
+          (issue: any, index: number) => ({
+            id: `issue-${Date.now()}-${index}`,
+            type: issue.type || "logic",
+            severity: issue.severity || "medium",
+            message: issue.message || "Issue found",
+            line: issue.line || 1,
+            column: issue.column || 1,
+            suggestion: issue.suggestion,
+            fixedCode: issue.fixedCode,
+          })
+        );
+
+        const refactorResult: RefactorResult | null = result.refactoring ? {
+          originalCode: code,
+          refactoredCode: result.refactoring.refactoredCode || code,
+          explanation: result.refactoring.explanation || "Code refactored",
+          improvements: result.refactoring.improvements || ["Code improved"],
+        } : null;
+
+        const codeSuggestions: CodeSuggestion[] = result.suggestions || [];
+
+        // Cache the results
+        this.cache.set(cacheKey, {
+          analysisResults,
+          refactorResult,
+          codeSuggestions,
+          timestamp: Date.now(),
+        });
+
+        return {
+          analysisResults,
+          refactorResult,
+          codeSuggestions,
+          error: null,
+        };
+      } catch (parseError) {
+        console.error("Failed to parse comprehensive analysis response:", parseError);
+        return {
+          analysisResults: [],
+          refactorResult: null,
+          codeSuggestions: [],
+          error: "Failed to parse analysis results. Please try again.",
+        };
+      }
+    } catch (error) {
+      return {
+        analysisResults: [],
+        refactorResult: null,
+        codeSuggestions: [],
+        error: error instanceof Error ? error.message : "Analysis failed",
       };
     }
   }

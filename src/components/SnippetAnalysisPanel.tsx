@@ -55,63 +55,18 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
     if (codeSuggestions.length > 0) setCodeSuggestions([]);
 
     try {
-      const [analysisResponse, refactorResponse, suggestionsResponse] =
-        await Promise.allSettled([
-          GeminiService.analyzeCode({ code, language }),
-          GeminiService.getRefactoringSuggestions({ code, language }),
-          GeminiService.getCodeSuggestions({ code, language }),
-        ]);
+      const result = await GeminiService.analyzeAll({ code, language });
 
-      // Helper to process a single promise result consistently
-      const processSingleResult = (
-        response: PromiseSettledResult<any>,
-        successSetter: (data: any) => void,
-        taskName: string,
-        shouldSetGlobalError: boolean = false,
-        successAction?: () => void
-      ) => {
-        if (response.status === "fulfilled") {
-          if (response.value?.data) {
-            successSetter(response.value.data);
-            successAction?.();
-          } else if (response.value?.error) {
-            console.error(`${taskName} failed:`, response.value.error);
-            if (shouldSetGlobalError) {
-              setError(response.value.error);
-            }
-          }
-        } else if (response.status === "rejected") {
-          console.error(`${taskName} failed:`, response.reason);
-          if (shouldSetGlobalError) {
-            setError(response.reason.message || `${taskName} failed`);
-          }
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setAnalysisResults(result.analysisResults);
+        setRefactorResult(result.refactorResult);
+        setCodeSuggestions(result.codeSuggestions);
+        if (result.refactorResult) {
+          setActiveTab("diff");
         }
-      };
-
-      // Handle Analysis Results
-      processSingleResult(
-        analysisResponse,
-        setAnalysisResults,
-        "Analysis",
-        true
-      );
-
-      // Handle Refactoring Results
-      processSingleResult(
-        refactorResponse,
-        setRefactorResult,
-        "Refactoring",
-        false, // Current behavior is not to set global error for refactor
-        () => setActiveTab("diff")
-      );
-
-      // Handle Suggestions Results
-      processSingleResult(
-        suggestionsResponse,
-        setCodeSuggestions,
-        "Suggestions",
-        false
-      ); // Current behavior is not to set global error for suggestions
+      }
     } catch (err) {
       setError(
         err instanceof Error
