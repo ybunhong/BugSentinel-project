@@ -93,7 +93,7 @@ export const SnippetForm: React.FC<SnippetFormProps> = ({
       zIndex: 1000,
     }}>
       <div style={{
-        backgroundColor: 'white',
+        backgroundColor: '#FDF5E6',
         padding: '24px',
         borderRadius: '8px',
         width: '90%',
@@ -102,7 +102,7 @@ export const SnippetForm: React.FC<SnippetFormProps> = ({
         overflow: 'auto',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
       }}>
-        <h3 style={{ margin: '0 0 20px 0', fontSize: '20px', fontWeight: '600' }}>
+        <h3 style={{ margin: '0 0 20px 0', fontSize: '20px', fontWeight: '600', color: '#000' }}>
           {isEditing ? 'Edit Snippet' : 'Create New Snippet'}
         </h3>
 
@@ -125,7 +125,8 @@ export const SnippetForm: React.FC<SnippetFormProps> = ({
               display: 'block', 
               marginBottom: '6px', 
               fontSize: '14px',
-              fontWeight: '500'
+              fontWeight: '500',
+              color: '#000'
             }}>
               Title *
             </label>
@@ -152,7 +153,8 @@ export const SnippetForm: React.FC<SnippetFormProps> = ({
               display: 'block', 
               marginBottom: '6px', 
               fontSize: '14px',
-              fontWeight: '500'
+              fontWeight: '500',
+              color: '#000'
             }}>
               Language *
             </label>

@@ -251,7 +251,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               role="contentinfo"
             >
               <div style={{ marginBottom: "4px" }} aria-hidden="true">
-                🐛 BugSentinel
+                BugSentinel
               </div>
               <div>AI Code Analysis</div>
             </div>
