@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { a11y } from "../utils/accessibility";
 import { Icon } from "./ui/Icon";
+import { Card } from "./ui/Card";
 
 import type { IconName } from "./ui/Icon";
 
@@ -104,16 +105,28 @@ export const Navigation: React.FC<NavigationProps> = ({
             }}
           >
             {isExpanded && (
-              <h2
-                style={{
-                  margin: 0,
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  color: theme === "dark" ? "#ffffff" : "#000000",
-                }}
-              >
-                BugSentinel
-              </h2>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <Icon name="code" size={20} />
+                <h2
+                  style={{
+                    margin: 0,
+                    fontSize: "18px",
+                    fontWeight: "600",
+                    background: theme === "dark"
+                      ? 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)'
+                      : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  BugSentinel
+                </h2>
+              </div>
             )}
 
             {!isExpanded && !isMobile && (
@@ -122,6 +135,8 @@ export const Navigation: React.FC<NavigationProps> = ({
                   fontSize: "24px",
                   textAlign: "center",
                   width: "100%",
+                  color: theme === "dark" ? "#ffffff" : "#000000",
+                  opacity: 0.9,
                 }}
               >
                 <Icon name="code" size={28} />
@@ -230,31 +245,57 @@ export const Navigation: React.FC<NavigationProps> = ({
           ))}
         </div>
 
-        {/* Footer */}
+        {/* Modern Footer */}
         {isExpanded && (
-          <div
-            style={{
-              padding: "20px",
-              borderTop:
-                theme === "dark"
-                  ? "1px solid rgba(102, 126, 234, 0.2)"
-                  : "1px solid rgba(118, 75, 162, 0.2)",
-              marginTop: "20px",
-            }}
-          >
-            <div
+          <div style={{ marginTop: "20px" }}>
+            <Card
+              variant="glass"
+              padding="md"
               style={{
-                fontSize: "12px",
-                color: theme === "dark" ? "#888888" : "#999999",
-                textAlign: "center",
+                background: theme === "dark"
+                  ? 'rgba(102, 126, 234, 0.1)'
+                  : 'rgba(118, 75, 162, 0.1)',
+                border: `1px solid ${theme === "dark"
+                  ? 'rgba(102, 126, 234, 0.2)'
+                  : 'rgba(118, 75, 162, 0.2)'}`,
+                borderRadius: '12px',
               }}
-              role="contentinfo"
             >
-              <div style={{ marginBottom: "4px" }} aria-hidden="true">
-                BugSentinel
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  flexDirection: 'column',
+                }}
+                role="contentinfo"
+              >
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginBottom: '4px'
+                }}>
+                  <Icon name="code" size={16} />
+                  <span style={{
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    color: theme === "dark" ? "#ffffff" : "#000000",
+                  }}>
+                    BugSentinel
+                  </span>
+                </div>
+                <div style={{
+                  fontSize: "11px",
+                  color: theme === "dark" ? "#888888" : "#999999",
+                  opacity: 0.8,
+                  textAlign: 'center'
+                }}>
+                  AI-Powered Code Analysis
+                </div>
               </div>
-              <div>AI Code Analysis</div>
-            </div>
+            </Card>
           </div>
         )}
       </nav>
