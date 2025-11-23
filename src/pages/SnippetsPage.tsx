@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { SparklesIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useStore } from "../store/useStore";
 import { SnippetService } from "../services/snippetService";

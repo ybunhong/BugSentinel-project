@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { MainDashboard } from "./pages/MainDashboard";
 import { AuthPage } from "./pages/AuthPage";
 import { SupabaseService } from "./services/supabaseService";
@@ -7,14 +7,13 @@ import "./App.css";
 
 function App() {
   const { isAuthenticated } = useAuth();
-  const [route, setRoute] = useState("analysis"); // default to analysis
 
   useEffect(() => {
     testSupabaseConnection();
 
     const onHashChange = () => {
-      const hash = window.location.hash.replace("#/", "");
-      setRoute(hash || "analysis"); // default = analysis
+      // Handle hash change if needed
+      // const hash = window.location.hash.replace("#/", "");
     };
 
     window.addEventListener("hashchange", onHashChange);
