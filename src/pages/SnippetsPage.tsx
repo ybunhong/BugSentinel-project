@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { SparklesIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useStore } from "../store/useStore";
 import { SnippetService } from "../services/snippetService";
 import { SnippetForm } from "../components/SnippetForm";
@@ -189,7 +190,7 @@ export const SnippetsPage: React.FC<SnippetsPageProps> = ({
           variant="primary"
           size="md"
           onClick={handleCreateSnippet}
-          leftIcon="✨"
+          leftIcon={<SparklesIcon className="h-3 w-3" />}
         >
           New Snippet
         </Button>
@@ -199,76 +200,78 @@ export const SnippetsPage: React.FC<SnippetsPageProps> = ({
       <div
         style={{
           display: "flex",
-          gap: "16px",
+          justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: "24px",
           flexWrap: "wrap",
-          alignItems: "center",
+          gap: "16px",
         }}
       >
-        <Input
-          type="text"
-          placeholder="Search snippets..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          leftIcon="🔍"
-          style={{
-            flex: 1,
-            minWidth: "200px",
-          }}
-        />
+        <div style={{ flex: "1", maxWidth: "400px", minWidth: "200px" }}>
+          <Input
+            type="text"
+            placeholder="Search snippets..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            leftIcon={<MagnifyingGlassIcon className="h-3 w-3" />}
+            style={{ width: "100%" }}
+          />
+        </div>
 
-        <select
-          value={selectedLanguage}
-          onChange={(e) => setSelectedLanguage(e.target.value)}
-          style={{
-            padding: "12px 16px",
-            fontSize: "14px",
-            background:
-              theme === "dark"
-                ? "rgba(15, 15, 35, 0.8)"
-                : "rgba(255, 255, 255, 0.8)",
-            border:
-              theme === "dark"
-                ? "1px solid rgba(102, 126, 234, 0.2)"
-                : "1px solid rgba(118, 75, 162, 0.2)",
-            borderRadius: "8px",
-            color: theme === "dark" ? "#ffffff" : "#000000",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <option value="all">All Languages</option>
-          {uniqueLanguages.map((lang) => (
-            <option key={lang} value={lang}>
-              {SnippetService.getLanguageLabel(lang)}
-            </option>
-          ))}
-        </select>
+        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+          <select
+            value={selectedLanguage}
+            onChange={(e) => setSelectedLanguage(e.target.value)}
+            style={{
+              padding: "12px 16px",
+              fontSize: "14px",
+              background:
+                theme === "dark"
+                  ? "rgba(15, 15, 35, 0.8)"
+                  : "rgba(255, 255, 255, 0.8)",
+              border:
+                theme === "dark"
+                  ? "1px solid rgba(102, 126, 234, 0.2)"
+                  : "1px solid rgba(118, 75, 162, 0.2)",
+              borderRadius: "8px",
+              color: theme === "dark" ? "#ffffff" : "#000000",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <option value="all">All Languages</option>
+            {uniqueLanguages.map((lang) => (
+              <option key={lang} value={lang}>
+                {SnippetService.getLanguageLabel(lang)}
+              </option>
+            ))}
+          </select>
 
-        <select
-          value={sortBy}
-          onChange={(e) =>
-            setSortBy(e.target.value as "updated" | "created" | "title")
-          }
-          style={{
-            padding: "12px 16px",
-            fontSize: "14px",
-            background:
-              theme === "dark"
-                ? "rgba(15, 15, 35, 0.8)"
-                : "rgba(255, 255, 255, 0.8)",
-            border:
-              theme === "dark"
-                ? "1px solid rgba(102, 126, 234, 0.2)"
-                : "1px solid rgba(118, 75, 162, 0.2)",
-            borderRadius: "8px",
-            color: theme === "dark" ? "#ffffff" : "#000000",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <option value="updated">Last Updated</option>
-          <option value="created">Date Created</option>
-          <option value="title">Title</option>
-        </select>
+          <select
+            value={sortBy}
+            onChange={(e) =>
+              setSortBy(e.target.value as "updated" | "created" | "title")
+            }
+            style={{
+              padding: "12px 16px",
+              fontSize: "14px",
+              background:
+                theme === "dark"
+                  ? "rgba(15, 15, 35, 0.8)"
+                  : "rgba(255, 255, 255, 0.8)",
+              border:
+                theme === "dark"
+                  ? "1px solid rgba(102, 126, 234, 0.2)"
+                  : "1px solid rgba(118, 75, 162, 0.2)",
+              borderRadius: "8px",
+              color: theme === "dark" ? "#ffffff" : "#000000",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <option value="updated">Last Updated</option>
+            <option value="created">Date Created</option>
+            <option value="title">Title</option>
+          </select>
+        </div>
       </div>
 
       {/* Error Message */}
@@ -490,7 +493,7 @@ export const SnippetsPage: React.FC<SnippetsPageProps> = ({
               variant="primary"
               size="lg"
               onClick={handleCreateSnippet}
-              leftIcon="✨"
+              leftIcon={<SparklesIcon className="h-4 w-4" />}
             >
               Create First Snippet
             </Button>

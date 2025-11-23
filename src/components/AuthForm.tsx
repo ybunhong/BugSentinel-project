@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { ModernInput } from "./ModernInput";
+import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import { Button } from "./ui";
 import { SupabaseService } from "../services/supabaseService";
 import { useStore } from "../store/useStore";
 
@@ -14,7 +17,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const { setUser, setAuthenticated } = useStore();
+  const { user, isAuthenticated, setUser, setAuthenticated } = useStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +56,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
           setSuccess(
             "Account created! Please check your email to verify your account."
           );
-          // Don't auto-login for signup, user needs to verify email first
         }
       }
     } catch (err) {
@@ -68,7 +70,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setLoading(true);
     const { error } = await SupabaseService.signOut();
     if (error) {
-      setError(error); // error is already string | null from service
+      setError(error);
     } else {
       setUser(null);
       setAuthenticated(false);
@@ -77,147 +79,87 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
     setLoading(false);
   };
 
-  const { user, isAuthenticated } = useStore();
-
   if (isAuthenticated && user) {
     return (
-      <div
-        style={{
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          maxWidth: "400px",
-          margin: "0 auto",
-        }}
-      >
-        <h3>Welcome, {user.email}!</h3>
-        <p>You are successfully logged in.</p>
-        <button
+      <div className="max-w-md mx-auto p-6 border rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Welcome, {user.email}!</h3>
+        <p className="mb-4">You are successfully logged in.</p>
+        <Button
+          variant="destructive"
+          size="lg"
           onClick={handleLogout}
           disabled={loading}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#dc3545",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
         >
           {loading ? "Logging out..." : "Logout"}
-        </button>
-        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+        </Button>
+        {error && (
+          <p className="text-red-600 dark:text-red-400 mt-4 font-medium">
+            {error}
+          </p>
+        )}
         {success && (
-          <p style={{ color: "green", marginTop: "10px" }}>{success}</p>
+          <p className="text-green-600 dark:text-green-400 mt-4 font-medium">
+            {success}
+          </p>
         )}
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        maxWidth: "400px",
-        margin: "0 auto",
-      }}
-    >
-      <h3>{isLogin ? "Login" : "Sign Up"}</h3>
+    <div className="max-w-md mx-auto p-6 rounded-lg shadow-md">
+      <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+        {isLogin ? "Login" : "Sign Up"}
+      </h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <ModernInput
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          icon={<EnvelopeIcon className="h-6 w-6" />}
+          required
+        />
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "15px" }}>
-          <label
-            htmlFor="email"
-            style={{ display: "block", marginBottom: "5px" }}
-          >
-            Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "8px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              fontSize: "14px",
-            }}
-          />
-        </div>
+        <ModernInput
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          icon={<LockClosedIcon className="h-6 w-6" />}
+          required
+          minLength={6}
+        />
 
-        <div style={{ marginBottom: "15px" }}>
-          <label
-            htmlFor="password"
-            style={{ display: "block", marginBottom: "5px" }}
-          >
-            Password:
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            style={{
-              width: "100%",
-              padding: "8px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              fontSize: "14px",
-            }}
-          />
-        </div>
-
-        <button
-          type="submit"
+        <Button
+          variant="primary"
+          size="lg"
+          style={{ width: "100%" }}
           disabled={loading}
-          style={{
-            width: "100%",
-            padding: "10px",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            fontSize: "16px",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
         >
           {loading ? "Processing..." : isLogin ? "Login" : "Sign Up"}
-        </button>
+        </Button>
       </form>
 
-      <div style={{ marginTop: "15px", textAlign: "center" }}>
-        <button
-          type="button"
+      <div className="mt-4 text-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          style={{ color: "#3b82f6", textDecoration: "underline" }} // Tailwind blue-500
           onClick={() => {
             setIsLogin(!isLogin);
             setError(null);
             setSuccess(null);
           }}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#007bff",
-            textDecoration: "underline",
-            cursor: "pointer",
-          }}
         >
           {isLogin
             ? "Need an account? Sign up"
             : "Already have an account? Login"}
-        </button>
+        </Button>
       </div>
 
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-      {success && (
-        <p style={{ color: "green", marginTop: "10px" }}>{success}</p>
-      )}
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {success && <p className="text-green-500 mt-4">{success}</p>}
     </div>
   );
 };

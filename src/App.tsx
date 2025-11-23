@@ -1,48 +1,44 @@
-import { useState, useEffect } from 'react';
-import { MainDashboard } from './pages/MainDashboard';
-import { AuthPage } from './pages/AuthPage';
-import { HomePage } from './pages/HomePage';
-import { SupabaseService } from './services/supabaseService';
-import { useAuth } from './hooks/useAuth';
-import './App.css';
+import { useState, useEffect } from "react";
+import { MainDashboard } from "./pages/MainDashboard";
+import { AuthPage } from "./pages/AuthPage";
+import { SupabaseService } from "./services/supabaseService";
+import { useAuth } from "./hooks/useAuth";
+import "./App.css";
 
 function App() {
   const { isAuthenticated } = useAuth();
-  const [route, setRoute] = useState('home');
+  const [route, setRoute] = useState("analysis"); // default to analysis
 
   useEffect(() => {
     testSupabaseConnection();
-    // Listen for hash changes
+
     const onHashChange = () => {
-      const hash = window.location.hash.replace('#/', '');
-      setRoute(hash || 'home');
+      const hash = window.location.hash.replace("#/", "");
+      setRoute(hash || "analysis"); // default = analysis
     };
-    window.addEventListener('hashchange', onHashChange);
+
+    window.addEventListener("hashchange", onHashChange);
     onHashChange();
-    return () => window.removeEventListener('hashchange', onHashChange);
+
+    return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
   const testSupabaseConnection = async () => {
     const result = await SupabaseService.testConnection();
     if (result.success) {
-      console.log('✅ Supabase connected successfully');
+      console.log("✅ Supabase connected successfully");
     } else {
-      console.warn('❌ Supabase connection failed:', result.error);
+      console.warn("❌ Supabase connection failed:", result.error);
     }
   };
 
-  if (!isAuthenticated && route === 'analysis') {
+  // Require login for dashboard
+  if (!isAuthenticated) {
     return <AuthPage />;
   }
 
-  switch (route) {
-    case 'home':
-      return <HomePage />;
-    case 'analysis':
-      return <MainDashboard />;
-    default:
-      return <HomePage />;
-  }
+  // Authenticated users go to dashboard
+  return <MainDashboard />;
 }
 
 export default App;

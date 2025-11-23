@@ -1,4 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  BugAntIcon,
+  SparklesIcon,
+  LightBulbIcon,
+  ChartBarIcon,
+  MagnifyingGlassIcon,
+  ShieldCheckIcon,
+  ExclamationTriangleIcon,
+  BoltIcon,
+  CpuChipIcon,
+  DocumentDuplicateIcon,
+} from "@heroicons/react/24/outline";
 import { useStore } from "../store/useStore";
 import { GeminiService } from "../services/geminiService";
 import { Button, Card } from "../components/ui";
@@ -105,21 +117,32 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "syntax":
-        return "⚠️";
+        return <ExclamationTriangleIcon className="h-4 w-4 text-yellow-500" />;
       case "logic":
-        return "🐛";
+        return <BugAntIcon className="h-4 w-4 text-red-500" />;
       case "security":
-        return "🔒";
+        return <ShieldCheckIcon className="h-4 w-4 text-green-500" />;
       case "performance":
-        return "⚡";
+        return <BoltIcon className="h-4 w-4 text-blue-500" />;
       case "style":
-        return "💡";
+        return <LightBulbIcon className="h-4 w-4 text-purple-500" />;
       default:
-        return "💡";
+        return <LightBulbIcon className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const isGeminiAvailable = GeminiService.isAvailable();
+
+  // Clear analysis results when component unmounts
+  useEffect(() => {
+    return () => {
+      setAnalysisResults([]);
+      setRefactorResult(null);
+      setCodeSuggestions([]);
+      setError(null);
+      setAnalyzing(false);
+    };
+  }, []);
 
   return (
     <div
@@ -152,12 +175,29 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
           <h3
             style={{
               margin: 0,
+              padding: 0,
               fontSize: "16px",
               fontWeight: "600",
               color: theme === "dark" ? "#ffffff" : "#000000",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              height: "24px", // Match icon height for perfect vertical alignment
+              lineHeight: "24px", // Ensure text is vertically centered
             }}
           >
-            🤖 AI Analysis
+            <CpuChipIcon
+              style={{
+                width: "20px",
+                height: "20px",
+                flexShrink: 0,
+                margin: 0,
+                padding: 0,
+              }}
+            />
+            <span style={{ margin: 0, padding: 0, lineHeight: 1 }}>
+              AI Analysis
+            </span>
           </h3>
 
           <div style={{ display: "flex", gap: "8px" }}>
@@ -166,7 +206,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
               size="sm"
               onClick={handleAnalyzeCode}
               disabled={isAnalyzing || !isGeminiAvailable}
-              leftIcon="🔍"
+              leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
             >
               {isAnalyzing ? "Analyzing..." : "Analyze All"}
             </Button>
@@ -176,10 +216,26 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
         {/* Tab Navigation */}
         <div style={{ display: "flex", gap: "4px" }}>
           {[
-            { id: "analysis", label: "Bugs", icon: "🐛" },
-            { id: "refactor", label: "Refactor", icon: "✨" },
-            { id: "suggestions", label: "Suggestions", icon: "💡" },
-            { id: "diff", label: "Diff", icon: "📊" },
+            {
+              id: "analysis",
+              label: "Bugs",
+              icon: <BugAntIcon className="h-4 w-4" />,
+            },
+            {
+              id: "refactor",
+              label: "Refactor",
+              icon: <SparklesIcon className="h-4 w-4" />,
+            },
+            {
+              id: "suggestions",
+              label: "Suggestions",
+              icon: <LightBulbIcon className="h-4 w-4" />,
+            },
+            {
+              id: "diff",
+              label: "Diff",
+              icon: <ChartBarIcon className="h-4 w-4" />,
+            },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -229,7 +285,10 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
               fontSize: "14px",
             }}
           >
-            <strong>⚠️ AI Features Disabled</strong>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <ExclamationTriangleIcon className="h-4 w-4" />
+              <span>AI Features Disabled</span>
+            </div>
             <p style={{ margin: "8px 0 0 0" }}>
               Add your Gemini API key to the .env file to enable AI-powered code
               analysis.
@@ -498,8 +557,18 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                   variant="primary"
                   size="md"
                   onClick={applyRefactoredCode}
-                  leftIcon="✨"
-                  style={{ alignSelf: "flex-start" }}
+                  leftIcon={
+                    <SparklesIcon style={{ width: "16px", height: "16px" }} />
+                  }
+                  style={{
+                    alignSelf: "flex-start",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                  }}
                 >
                   Apply Refactored Code
                 </Button>
@@ -666,8 +735,18 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                   variant="primary"
                   size="md"
                   onClick={applyRefactoredCode}
-                  leftIcon="✨"
-                  style={{ alignSelf: "flex-start" }}
+                  leftIcon={
+                    <SparklesIcon style={{ width: "16px", height: "16px" }} />
+                  }
+                  style={{
+                    alignSelf: "flex-start",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                  }}
                 >
                   Apply Refactored Code
                 </Button>
@@ -681,8 +760,21 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                       );
                     }
                   }}
-                  leftIcon="📋"
-                  style={{ alignSelf: "flex-start", marginLeft: "12px" }} // Add some margin
+                  leftIcon={
+                    <DocumentDuplicateIcon
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                  }
+                  style={{
+                    alignSelf: "flex-start",
+                    marginLeft: "12px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                  }}
                 >
                   Copy Fixed Code
                 </Button>

@@ -1,0 +1,107 @@
+.mi-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 14px;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: border 0.25s ease;
+}
+
+.dark-theme .mi-container {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mi-container:focus-within {
+  border-color: #818cf8; /* indigo-400 */
+}
+
+/* Icon */
+.mi-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+}
+
+/* Input */
+.mi-input {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 8px 0;
+}
+
+/* Floating Label */
+.mi-label {
+  position: absolute;
+  left: 54px;
+  top: 16px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+  transition: 0.25s ease;
+}
+
+.mi-input:focus + .mi-label,
+.mi-input:not(:placeholder-shown) + .mi-label {
+  top: -6px;
+  font-size: 12px;
+  color: #c7d2fe; /* indigo-200 */
+}
+
+/* Password toggle */
+.mi-eye {
+  background: none;
+  border: none;
+  position: absolute;
+  right: 14px;
+  cursor: pointer;
+}
+
+.mi-eye-icon {
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: 0.2s;
+}
+
+.mi-eye-icon:hover {
+  color: #fff;
+}
+
+/* Light mode fixes */
+.light-theme .mi-container {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.light-theme .mi-input {
+  color: #333; /* dark text */
+}
+
+.light-theme .mi-label {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.light-theme .mi-input:focus + .mi-label,
+.light-theme .mi-input:not(:placeholder-shown) + .mi-label {
+  color: #4f46e5; /* indigo-600 */
+}
+
+.light-theme .mi-icon,
+.light-theme .mi-eye-icon {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.light-theme .mi-eye-icon:hover {
+  color: #000;
+}

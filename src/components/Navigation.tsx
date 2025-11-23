@@ -105,23 +105,29 @@ export const Navigation: React.FC<NavigationProps> = ({
             }}
           >
             {isExpanded && (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
                 <Icon name="code" size={20} />
                 <h2
                   style={{
                     margin: 0,
                     fontSize: "18px",
                     fontWeight: "600",
-                    background: theme === "dark"
-                      ? 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)'
-                      : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
+                    background:
+                      theme === "dark"
+                        ? "linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)"
+                        : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    color: "transparent",
+                    display: "inline-block",
+                    lineHeight: "1",
                   }}
                 >
                   BugSentinel
@@ -252,46 +258,55 @@ export const Navigation: React.FC<NavigationProps> = ({
               variant="glass"
               padding="md"
               style={{
-                background: theme === "dark"
-                  ? 'rgba(102, 126, 234, 0.1)'
-                  : 'rgba(118, 75, 162, 0.1)',
-                border: `1px solid ${theme === "dark"
-                  ? 'rgba(102, 126, 234, 0.2)'
-                  : 'rgba(118, 75, 162, 0.2)'}`,
-                borderRadius: '12px',
+                background:
+                  theme === "dark"
+                    ? "rgba(102, 126, 234, 0.1)"
+                    : "rgba(118, 75, 162, 0.1)",
+                border: `1px solid ${
+                  theme === "dark"
+                    ? "rgba(102, 126, 234, 0.2)"
+                    : "rgba(118, 75, 162, 0.2)"
+                }`,
+                borderRadius: "12px",
               }}
             >
               <div
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  flexDirection: 'column',
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  flexDirection: "column",
                 }}
                 role="contentinfo"
               >
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  marginBottom: '4px'
-                }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    marginBottom: "4px",
+                  }}
+                >
                   <Icon name="code" size={16} />
-                  <span style={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: theme === "dark" ? "#ffffff" : "#000000",
-                  }}>
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      color: theme === "dark" ? "#ffffff" : "#000000",
+                    }}
+                  >
                     BugSentinel
                   </span>
                 </div>
-                <div style={{
-                  fontSize: "11px",
-                  color: theme === "dark" ? "#888888" : "#999999",
-                  opacity: 0.8,
-                  textAlign: 'center'
-                }}>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: theme === "dark" ? "#888888" : "#999999",
+                    opacity: 0.8,
+                    textAlign: "center",
+                  }}
+                >
                   AI-Powered Code Analysis
                 </div>
               </div>
