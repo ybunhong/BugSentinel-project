@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { SparklesIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+  SparklesIcon,
+  MagnifyingGlassIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import { useStore } from "../store/useStore";
 import { SnippetService } from "../services/snippetService";
 import { SnippetForm } from "../components/SnippetForm";
@@ -375,7 +380,7 @@ export const SnippetsPage: React.FC<SnippetsPageProps> = ({
                     }}
                     title="Edit snippet info"
                   >
-                    ✏️
+                    <PencilSquareIcon className="h-4 w-4" />
                   </button>
                   <button
                     onClick={(e) => {
@@ -393,7 +398,7 @@ export const SnippetsPage: React.FC<SnippetsPageProps> = ({
                     }}
                     title="Delete snippet"
                   >
-                    🗑️
+                    <TrashIcon className="h-4 w-4" />
                   </button>
                 </div>
               </div>

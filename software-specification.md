@@ -5,7 +5,7 @@
 **Project Name:** BugSentinel
 **Version:** 1.0.0
 **Description:**
-BugSentinel is a developer tool that combines **AI-powered bug detection** with **snippet management**. It helps developers analyze code, find issues, and refactor snippets efficiently. The application is **local-first** but integrates with external AI (Google Gemini, extensible to other models) when configured.
+BugSentinel is a developer tool that combines **bug detection** with **snippet management**. It helps developers analyze code, find issues, and refactor snippets efficiently. The application is **local-first** and uses built-in analysis features for code review.
 
 **Goals:**
 
@@ -23,7 +23,7 @@ BugSentinel is a developer tool that combines **AI-powered bug detection** with 
 * **Backend (Serverless):** Node.js runtime, deployed as edge functions
 * **Database:** Supabase (PostgreSQL) for snippets and user accounts
 * **Authentication:** Supabase Auth (email/password, OAuth)
-* **AI Integration:** Google Gemini (via `@google/generative-ai` SDK)
+* **Analysis Engine:** Built-in analysis service
 * **Styling:** Vanilla CSS with custom variables for dark/light themes
 
 ---
@@ -74,7 +74,7 @@ BugSentinel is a developer tool that combines **AI-powered bug detection** with 
 * Create, update, delete, and list snippets
 * Metadata: language, title, timestamp, last analysis results
 
-### 3.3 Code Analysis (AI-powered)
+### 3.3 Code Analysis
 
 * Detect syntax errors, logic issues, security flaws
 * Show inline squiggles + tooltips in editor

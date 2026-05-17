@@ -31,14 +31,14 @@ export class SyncService {
   }
 
   private static handleOnline(): void {
-    console.log("🌐 Back online - starting sync...");
+    console.log("Back online - starting sync...");
     this.isOnline = true;
     this.retryCount = 0;
     this.syncWhenOnline();
   }
 
   private static handleOffline(): void {
-    console.log("📴 Gone offline - switching to local mode");
+    console.log("Gone offline - switching to local mode");
     this.isOnline = false;
   }
 

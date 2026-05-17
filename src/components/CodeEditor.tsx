@@ -87,7 +87,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             result.message
           }${
             result.suggestion
-              ? `\n\n💡 **Suggestion:** ${result.suggestion}`
+              ? `\n\nSuggestion: ${result.suggestion}`
               : ""
           }`,
         },
@@ -129,16 +129,31 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           border-bottom: 2px wavy #ffc107;
         }
         .analysis-glyph-high::before {
-          content: "🔴";
-          font-size: 12px;
+          content: "";
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background: #dc3545;
+          border-radius: 50%;
+          margin-left: 4px;
         }
         .analysis-glyph-medium::before {
-          content: "🟠";
-          font-size: 12px;
+          content: "";
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background: #fd7e14;
+          border-radius: 50%;
+          margin-left: 4px;
         }
         .analysis-glyph-low::before {
-          content: "🟡";
-          font-size: 12px;
+          content: "";
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background: #ffc107;
+          border-radius: 50%;
+          margin-left: 4px;
         }
       `}</style>
       <Editor

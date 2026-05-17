@@ -102,9 +102,9 @@ export const SettingsPage: React.FC = () => {
 
       SnippetService.cleanupSync();
 
-      console.log("✅ Successfully logged out");
+      console.log("Successfully logged out");
     } catch (error) {
-      console.error("❌ Logout error:", error);
+      console.error("Logout error:", error);
       alert("Failed to log out. Please try again.");
     } finally {
       setIsLoggingOut(false);
@@ -309,7 +309,7 @@ export const SettingsPage: React.FC = () => {
       </SettingsSection>
 
       {/* AI Configuration */}
-      <SettingsSection title="AI Configuration">
+      <SettingsSection title="Analysis Configuration">
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
             <h4
@@ -320,7 +320,7 @@ export const SettingsPage: React.FC = () => {
                 color: theme === "dark" ? "#ffffff" : "#000000",
               }}
             >
-              Gemini API Status
+              Analysis Service Status
             </h4>
 
             <div
@@ -339,8 +339,8 @@ export const SettingsPage: React.FC = () => {
               }}
             >
               {GeminiService.isAvailable()
-                ? "✅ AI features are enabled and ready"
-                : "⚠️ AI features are disabled - API key required"}
+                ? "Analysis service is enabled and ready"
+                : "Analysis service is disabled - API key required"}
             </div>
 
             <p
@@ -350,7 +350,7 @@ export const SettingsPage: React.FC = () => {
                 marginBottom: "12px",
               }}
             >
-              To enable AI features, add your Gemini API key to the .env file:
+              To enable code analysis, add your Gemini API key to your environment file.
             </p>
 
             <code
@@ -440,7 +440,7 @@ export const SettingsPage: React.FC = () => {
                 margin: "0 0 8px 0",
               }}
             >
-              AI-powered code analysis and bug detection tool
+              Code analysis and bug detection tool
             </p>
           </div>
 
@@ -463,7 +463,7 @@ export const SettingsPage: React.FC = () => {
                 paddingLeft: "20px",
               }}
             >
-              <li>Real-time code analysis with AI</li>
+              <li>Real-time code analysis</li>
               <li>15+ programming languages supported</li>
               <li>Custom analysis prompts</li>
               <li>Snippet management and storage</li>

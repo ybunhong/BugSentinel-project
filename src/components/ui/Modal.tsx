@@ -147,7 +147,7 @@ export const Modal: React.FC<ModalProps> = ({
                   e.currentTarget.style.background = 'none';
                 }}
               >
-                ✕
+                x
               </button>
             )}
           </div>

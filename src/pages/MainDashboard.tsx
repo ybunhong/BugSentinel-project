@@ -133,7 +133,7 @@ export const MainDashboard: React.FC = () => {
                 }}
               />
 
-              {/* AI Analysis Panel */}
+              {/* Analysis Panel */}
               <div
                 style={{
                   width: `${analysisPanelWidth}px`, // Dynamic width

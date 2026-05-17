@@ -40,21 +40,21 @@ export const Toast: React.FC<ToastProps> = ({
           background: colors.success.light,
           color: colors.success.dark,
           border: `1px solid ${colors.success.main}`,
-          icon: '✅'
+          icon: 'S'
         };
       case 'error':
         return {
           background: colors.error.light,
           color: colors.error.dark,
           border: `1px solid ${colors.error.main}`,
-          icon: '❌'
+          icon: '!'
         };
       case 'warning':
         return {
           background: colors.warning.light,
           color: colors.warning.dark,
           border: `1px solid ${colors.warning.main}`,
-          icon: '⚠️'
+          icon: '!'
         };
       case 'info':
       default:
@@ -62,7 +62,7 @@ export const Toast: React.FC<ToastProps> = ({
           background: colors.info.light,
           color: colors.info.dark,
           border: `1px solid ${colors.info.main}`,
-          icon: 'ℹ️'
+          icon: 'i'
         };
     }
   };
@@ -115,7 +115,7 @@ export const Toast: React.FC<ToastProps> = ({
         onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
         onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
       >
-        ✕
+        x
       </button>
     </div>
   );

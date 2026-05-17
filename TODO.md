@@ -1,10 +1,9 @@
-# TODO: Optimize AI Analysis Performance
+# TODO: Optimize Analysis Performance
 
 ## Current Issues
-- AI analysis takes too long due to multiple concurrent API calls (analyzeCode, getRefactoringSuggestions, getCodeSuggestions)
-- Long prompts may be causing slower responses
+- AI analysis uses Gemini integration and should be optimized for speed
 - No caching of results for repeated analyses
-- Rate limiting (10 requests/hour) can be hit quickly with multiple calls
+- Rate limiting and prompt handling can be improved
 
 ## Optimization Tasks
 - [x] Analyze current performance bottlenecks in GeminiService and SnippetAnalysisPanel

@@ -7,7 +7,7 @@ import { Button } from "../components/ui";
 export const CodeAnalysisPage: React.FC = () => {
   const { theme } = useStore();
   const [code, setCode] = useState(
-    '// Enter your code here for AI analysis...\n\nfunction example() {\n  console.log("Hello World");\n}'
+    '// Enter your code here for code analysis...\n\nfunction example() {\n  console.log("Hello World");\n}'
   );
   const [language, setLanguage] = useState("javascript");
   const [jumpToLineFunction, setJumpToLineFunction] = useState<
@@ -126,7 +126,7 @@ export const CodeAnalysisPage: React.FC = () => {
                   theme === "dark" ? "#ffffff" : "var(--light-text-primary)",
               }}
             >
-              🤖 AI Code Analysis
+              Code Analysis
             </h1>
             <p
               style={{
@@ -225,7 +225,7 @@ export const CodeAnalysisPage: React.FC = () => {
               size="sm"
               onClick={() =>
                 setCode(
-                  '// Enter your code here for AI analysis...\n\nfunction example() {\n  console.log("Hello World");\n}'
+                    '// Enter your code here for code analysis...\n\nfunction example() {\n  console.log("Hello World");\n}'
                 )
               }
             >
@@ -257,7 +257,7 @@ export const CodeAnalysisPage: React.FC = () => {
           }}
         />
 
-        {/* AI Analysis Panel */}
+        {/* Analysis Panel */}
         <div
           style={{
             width: `${analysisPanelWidth}px`, // Dynamic width

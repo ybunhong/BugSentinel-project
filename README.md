@@ -1,6 +1,6 @@
 # BugSentinel
 
-BugSentinel is a developer tool that combines **AI-powered bug detection** with **snippet management**. It helps developers analyze code, find issues, and refactor snippets efficiently.
+BugSentinel is a developer tool that combines **bug detection** with **snippet management**. It helps developers analyze code, find issues, and refactor snippets efficiently.
 
 ### Core Foundations
 
@@ -17,11 +17,11 @@ BugSentinel is a developer tool that combines **AI-powered bug detection** with 
 - **Dashboard UI** with responsive panels and sidebar
 - **Cross-device sync** for preferences and last opened snippet
 
-### AI-Powered Features
+### Code Analysis Features
 
-- **Gemini AI integration** for intelligent code analysis
+- **Gemini integration** for intelligent code analysis
 - **Error highlighting** with squiggly underlines and tooltips
-- **Code refactoring** with AI-suggested improvements
+- **Code refactoring** with suggested improvements
 - **Diff visualization** with before/after code comparison
 
 ## Quick Start
@@ -112,17 +112,17 @@ src/
 - **Editor settings** preserved per user
 - **Real-time synchronization** with Supabase
 
-### AI-Powered Code Analysis
+### Code Analysis
 
-- **Intelligent bug detection** using Google Gemini AI
+- **Intelligent bug detection** through built-in static review
 - **Multi-type analysis** (syntax, logic, security, performance issues)
 - **Inline error highlighting** with squiggly underlines
 - **Interactive tooltips** with detailed explanations and suggestions
 - **Severity-based color coding** (high/medium/low priority issues)
 
-### AI Code Refactoring
+### Code Refactoring
 
-- **Smart code improvements** with AI-generated suggestions
+- **Smart code improvements** with generated suggestions
 - **Before/after diff visualization** with syntax highlighting
 - **Detailed explanations** of what changes were made and why
 - **One-click apply/reject** workflow for suggested changes
@@ -132,7 +132,7 @@ src/
 
 - Monaco Editor with syntax highlighting and error decorations
 - Multi-language support (JavaScript, TypeScript, Python, Java, C++, etc.)
-- Theme support (light/dark mode) with AI panel integration
+- Theme support (light/dark mode) with panel integration
 - Real-time code editing with auto-completion
 - **Jump-to-line functionality** from analysis results
 - **Visual error indicators** in gutter and minimap
@@ -166,7 +166,7 @@ src/
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-VITE_GEMINI_API_KEY=your_gemini_api_key  # For Phase 3
+VITE_GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ## Testing
@@ -177,8 +177,8 @@ The app includes comprehensive testing capabilities:
 - **Snippet Management:** Create, edit, delete, and list snippets
 - **Cross-Device Sync:** Theme and preferences sync across sessions
 - **Real-time Editing:** Code changes with auto-save functionality
-- **AI Code Analysis:** Test bug detection with sample code snippets
-- **AI Refactoring:** Generate and apply code improvements
+- **Code Analysis:** Test bug detection with sample code snippets
+- **Refactoring:** Generate and apply code improvements
 - **Error Highlighting:** Visual indicators and tooltips in editor
 - **Responsive UI:** Dashboard layout adapts to different screen sizes
 - **Error Handling:** Graceful error messages and recovery
@@ -208,7 +208,7 @@ Ready to implement security and offline features:
 
 ---
 
-**Status:** Phase 1, 2 & 3 Complete ✅  
+**Status:** Phase 1, 2 & 3 complete.
 **Next:** Ready for Phase 4 (Security & Offline Support) implementation
 
 **Contact: ybunhong12@gmail.com**

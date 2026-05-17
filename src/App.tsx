@@ -25,9 +25,9 @@ function App() {
   const testSupabaseConnection = async () => {
     const result = await SupabaseService.testConnection();
     if (result.success) {
-      console.log("✅ Supabase connected successfully");
+      console.log("Supabase connected successfully");
     } else {
-      console.warn("❌ Supabase connection failed:", result.error);
+      console.warn("Supabase connection failed:", result.error);
     }
   };
 

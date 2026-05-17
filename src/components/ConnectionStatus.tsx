@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { SyncService } from "../services/syncService";
-import { GeminiService } from "../services/geminiService";
 import { useStore } from "../store/useStore";
 
 export const ConnectionStatus: React.FC = () => {
@@ -8,15 +7,11 @@ export const ConnectionStatus: React.FC = () => {
   const [connectionStatus, setConnectionStatus] = useState(
     SyncService.getConnectionStatus()
   );
-  const [rateLimitStatus, setRateLimitStatus] = useState(
-    GeminiService.getRateLimitStatus()
-  );
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const updateStatus = () => {
       setConnectionStatus(SyncService.getConnectionStatus());
-      setRateLimitStatus(GeminiService.getRateLimitStatus());
     };
 
     // Update status every 5 seconds
@@ -59,10 +54,10 @@ export const ConnectionStatus: React.FC = () => {
   };
 
   const getStatusIcon = () => {
-    if (!connectionStatus.isOnline) return "📴";
-    if (connectionStatus.syncInProgress) return "🔄";
-    if (connectionStatus.pendingChanges > 0) return "⏳";
-    return "✅";
+    if (!connectionStatus.isOnline) return "Offline";
+    if (connectionStatus.syncInProgress) return "Syncing";
+    if (connectionStatus.pendingChanges > 0) return "Pending";
+    return "Ready";
   };
 
   return (
@@ -153,14 +148,14 @@ export const ConnectionStatus: React.FC = () => {
                   color: connectionStatus.isOnline ? "#28a745" : "#ff6b6b",
                 }}
               >
-                {connectionStatus.isOnline ? "🌐 Online" : "📴 Offline"}
+                {connectionStatus.isOnline ? "Online" : "Offline"}
               </span>
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span>Sync Status:</span>
               <span style={{ color: getStatusColor() }}>
-                {connectionStatus.syncInProgress ? "🔄 Syncing" : "✅ Ready"}
+                {connectionStatus.syncInProgress ? "Syncing" : "Ready"}
               </span>
             </div>
 
@@ -187,51 +182,6 @@ export const ConnectionStatus: React.FC = () => {
                 margin: "8px 0",
               }}
             />
-
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>AI Status:</span>
-              <span
-                style={{
-                  color: GeminiService.isAvailable() ? "#28a745" : "#ff6b6b",
-                }}
-              >
-                {GeminiService.isAvailable() ? "🤖 Available" : "❌ Disabled"}
-              </span>
-            </div>
-
-            {GeminiService.isAvailable() && (
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>AI Requests Left:</span>
-                <span
-                  style={{
-                    color:
-                      rateLimitStatus.requestsRemaining > 5
-                        ? "#28a745"
-                        : rateLimitStatus.requestsRemaining > 2
-                        ? "#ffc107"
-                        : "#ff6b6b",
-                  }}
-                >
-                  {rateLimitStatus.requestsRemaining}/10
-                </span>
-              </div>
-            )}
-
-            {!GeminiService.hasValidApiKey() && (
-              <div
-                style={{
-                  marginTop: "8px",
-                  padding: "8px",
-                  background: "rgba(255, 193, 7, 0.1)",
-                  border: "1px solid rgba(255, 193, 7, 0.3)",
-                  borderRadius: "6px",
-                  fontSize: "11px",
-                  color: "#ffc107",
-                }}
-              >
-                ⚠️ Add Gemini API key to enable AI features
-              </div>
-            )}
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span>Last Sync:</span>
@@ -267,8 +217,8 @@ export const ConnectionStatus: React.FC = () => {
                   }}
                 >
                   {connectionStatus.syncInProgress
-                    ? "🔄 Syncing..."
-                    : "🔄 Sync Now"}
+                    ? "Syncing..."
+                    : "Sync Now"}
                 </button>
               )}
           </div>

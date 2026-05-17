@@ -32,7 +32,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   const [isMobile] = useState(window.innerWidth < 768);
 
   const navigationItems: NavigationItem[] = [
-    { id: "analysis", label: "AI Analysis", icon: "zap" },
+    { id: "analysis", label: "Code Analysis", icon: "zap" },
     { id: "snippets", label: "Snippets", icon: "snippets" },
     { id: "settings", label: "Settings", icon: "settings" },
   ];
@@ -162,7 +162,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                   padding: "4px",
                 }}
               >
-                ✕
+                <Icon name="close" size={18} />
               </button>
             )}
           </div>
@@ -307,7 +307,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                     textAlign: "center",
                   }}
                 >
-                  AI-Powered Code Analysis
+                  Code Analysis
                 </div>
               </div>
             </Card>

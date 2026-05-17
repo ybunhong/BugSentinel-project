@@ -26,7 +26,7 @@ export class SupabaseService {
         console.error("Supabase signOut error:", error);
         return { error: error.message };
       }
-      console.log("✅ Successfully signed out from Supabase");
+      console.log("Successfully signed out from Supabase");
       return { error: null };
     } catch (error) {
       console.error("Unexpected signOut error:", error);

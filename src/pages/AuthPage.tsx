@@ -68,7 +68,7 @@ export const AuthPage: React.FC = () => {
                 </div>
                 <h2 className="welcome-heading">BugSentinel</h2>
                 <p className="welcome-subtitle">
-                  AI-powered code analysis and bug detection
+                  Code analysis and bug detection
                 </p>
               </div>
 

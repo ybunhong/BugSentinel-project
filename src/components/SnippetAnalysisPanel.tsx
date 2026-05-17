@@ -54,9 +54,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
     }
 
     if (!GeminiService.isAvailable()) {
-      setError(
-        "AI analysis is not available. Please add your Gemini API key to the .env file."
-      );
+      setError("Code analysis is not available. Please add your Gemini API key to the .env file.");
       return;
     }
 
@@ -131,7 +129,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
     }
   };
 
-  const isGeminiAvailable = GeminiService.isAvailable();
+  const isAnalysisAvailable = GeminiService.isAvailable();
 
   // Clear analysis results when component unmounts
   useEffect(() => {
@@ -196,7 +194,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
               }}
             />
             <span style={{ margin: 0, padding: 0, lineHeight: 1 }}>
-              AI Analysis
+              Analysis
             </span>
           </h3>
 
@@ -205,10 +203,10 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
               variant="primary"
               size="sm"
               onClick={handleAnalyzeCode}
-              disabled={isAnalyzing || !isGeminiAvailable}
+              disabled={isAnalyzing || !isAnalysisAvailable}
               leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
             >
-              {isAnalyzing ? "Analyzing..." : "Analyze All"}
+              {isAnalyzing ? "Analyzing..." : "Analyze"}
             </Button>
           </div>
         </div>
@@ -274,12 +272,12 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
 
       {/* Content */}
       <div style={{ flex: 1, overflow: "auto", padding: "16px" }}>
-        {!isGeminiAvailable && (
+        {!isAnalysisAvailable && (
           <div
             style={{
               padding: "16px",
               backgroundColor: theme === "dark" ? "#3a3a3a" : "#fff3cd",
-              color: theme === "dark" ? "#ffc107" : "#856404",
+              color: theme === "dark" ? "#856404" : "#856404",
               borderRadius: "6px",
               marginBottom: "16px",
               fontSize: "14px",
@@ -287,11 +285,10 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <ExclamationTriangleIcon className="h-4 w-4" />
-              <span>AI Features Disabled</span>
+              <span>Analysis Disabled</span>
             </div>
             <p style={{ margin: "8px 0 0 0" }}>
-              Add your Gemini API key to the .env file to enable AI-powered code
-              analysis.
+              Code analysis is currently unavailable.
             </p>
           </div>
         )}
@@ -433,7 +430,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                                 lineHeight: "1.3",
                               }}
                             >
-                              💡 {result.suggestion}
+                              {result.suggestion}
                             </p>
                           )}
 
@@ -490,7 +487,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                   padding: "40px 20px",
                 }}
               >
-                <p>Click "Analyze All" to get code refactoring suggestions</p>
+                <p>Click "Analyze" to get code refactoring suggestions</p>
               </div>
             )}
 
@@ -588,7 +585,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                   padding: "40px 20px",
                 }}
               >
-                <p>Click "Analyze All" to get code improvement suggestions</p>
+                <p>Click "Analyze" to get code improvement suggestions</p>
               </div>
             )}
 
@@ -653,7 +650,7 @@ export const SnippetAnalysisPanel: React.FC<SnippetAnalysisPanelProps> = ({
                         variant="secondary"
                         size="md"
                         onClick={() => applySuggestion(suggestion)}
-                        leftIcon="💡"
+                        leftIcon={<LightBulbIcon className="h-4 w-4" />}
                         style={{ alignSelf: "flex-start" }}
                       >
                         Apply Suggestion
